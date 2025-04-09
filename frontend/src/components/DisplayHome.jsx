@@ -9,20 +9,28 @@ const DisplayHome = () => {
     <>
     <Navbar/>
     <div className="mb-4">
-        <h1 className="my-5 font-bold text-2xl">Featured Charts</h1>
+        <h1 className="my-5 font-bold text-2xl">Bảng xếp hạng nổi bật</h1>
         <div className="flex overflow-auto">
         {albumsData.map((item,index)=>(<AlbumItem key={index} name={item.name} desc={item.desc} id={item.id}
         image={item.image}/>))}
         </div>
     </div>
     <div className="mb-4">
-        <h1 className="my-5 font-bold text-2xl">Today&apos;s biggest hits</h1>
+        <h1 className="my-5 font-bold text-2xl">Những bài hát thịnh hành</h1>
+        <div className="flex overflow-auto">
+      {songsData.map((item,index)=>(<SongItem key={index} name={item.name} desc={item.desc} id={item.id}
+        image={item.image}/>))}
+        </div>
+    </div>
+    <div className="mb-4">
+        <h1 className="my-5 font-bold text-2xl">Nghệ sĩ phổ biến</h1>
         <div className="flex overflow-auto">
       {songsData.map((item,index)=>(<SongItem key={index} name={item.name} desc={item.desc} id={item.id}
         image={item.image}/>))}
         </div>
     </div>
     </>
+    
   )
 }
 
