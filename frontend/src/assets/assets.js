@@ -24,6 +24,9 @@ import spotify_icon from './spotify.png'
 import clock_icon from './clock_icon.png'
 import downloading_icon from './downloading.png'
 import external_icon from './external.png'
+import heart_icon from './heart.png'
+import heartlove_icon from './heartlove.png'
+import mute_icon from './mute.png'
 import img1 from './img1.jpg'
 import img2 from './img2.jpg'
 import img3 from './img3.jpg'
@@ -73,6 +76,9 @@ export const assets = {
     spotify_icon,
     downloading_icon,
     external_icon,
+    heart_icon,
+    heartlove_icon,
+    mute_icon,
     clock_icon
 }
 

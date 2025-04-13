@@ -12,7 +12,7 @@ const Sidebar = () => {
               <img className="w-6" src={assets.stack_icon} alt="stack_icon" />
               <p className="font-bold text-[18px]">Thư viện</p>
             </button>
-            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 text-xs text-white bg-gray-black rounded shadow opacity-0 group-hover:opacity-100 transition duration-200 pointer-events-none whitespace-nowrap">
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 text-sm text-white bg-gray-black rounded shadow opacity-0 group-hover:opacity-100 transition duration-200 pointer-events-none whitespace-nowrap">
               Thu gọn thư viện
             </div>
           </div>
@@ -23,7 +23,7 @@ const Sidebar = () => {
                 <img className="w-3" src={assets.plus_icon} alt="plus_icon" />
                 <span className="text-sm font-semibold">Tạo</span>
               </button>
-              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 bg-gray-black text-white text-xs rounded shadow opacity-0 group-hover:opacity-100 transition duration-200 whitespace-nowrap pointer-events-none">
+              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 bg-[#242424] text-white font-bold text-sm rounded shadow opacity-0 group-hover:opacity-100 transition duration-200 whitespace-nowrap pointer-events-none">
                 Tạo danh sách, thư mục hoặc Jam
               </div>
             </div>
@@ -36,7 +36,7 @@ const Sidebar = () => {
                   alt="arrow_icon"
                 />
               </button>
-              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 bg-gray-black text-white text-xs rounded shadow opacity-0 group-hover:opacity-100 transition duration-200 whitespace-nowrap pointer-events-none">
+              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 bg-gray-black text-white text-sm rounded shadow opacity-0 group-hover:opacity-100 transition duration-200 whitespace-nowrap pointer-events-none">
                 Xem thêm
               </div>
             </div>
