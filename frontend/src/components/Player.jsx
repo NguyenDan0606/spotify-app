@@ -112,7 +112,9 @@ const Player = () => {
           </div>
         </div>
         <div className="flex items-center gap-5">
-          <p>{time.currentTime.minute}:{time.currentTime.second}</p>
+          <p>
+            {time.currentTime.minute}:{String(time.currentTime.second).padStart(2, "0")}
+          </p>
           <div
             ref={seekBg}
             onClick={seekSong}
@@ -123,7 +125,7 @@ const Player = () => {
               className="h-1 border-none w-0 bg-green-800 rounded-full"
             />
           </div>
-          <p>{time.totalTime.minute}:{time.totalTime.second}</p>
+          <p>{time.totalTime.minute}:{String(time.totalTime.second)}</p>
         </div>
       </div>
 

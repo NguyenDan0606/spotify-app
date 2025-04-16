@@ -57,9 +57,16 @@ const PlayerContextProvider = (props) => {
     }
   }
 
-  const seekSong = async(e) => {
-    audioRef.current.currentTime = ((e.nativeEvent.offsetX / seekBg.current.offsetWidth))* audioRef.current.duration;
-  }
+  const seekSong = (e) => {
+    const offsetX = e.nativeEvent.offsetX;
+    const seekWidth = seekBg.current.offsetWidth;
+    const percentage = offsetX / seekWidth;
+  
+    const newTime = percentage * audioRef.current.duration;
+    audioRef.current.currentTime = newTime;
+  };
+  
+  
 
   const toggleMute = () => {
     const newMuted = !isMuted;
@@ -88,6 +95,34 @@ const PlayerContextProvider = (props) => {
     audio.addEventListener("loadedmetadata", handleLoadedMetadata);
     return () => audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
   }, []);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+  
+    const handleTimeUpdate = () => {
+      const current = audio.currentTime;
+      const duration = audio.duration;
+  
+      // Cập nhật thời gian hiện tại
+      setTime(prev => ({
+        ...prev,
+        currentTime: {
+          second: Math.floor(current % 60),
+          minute: Math.floor(current / 60),
+        },
+      }));
+  
+      // Cập nhật thanh seekBar
+      if (seekBar.current && seekBg.current) {
+        const progress = (current / duration) * 100;
+        seekBar.current.style.width = `${progress}%`;
+      }
+    };
+  
+    audio.addEventListener("timeupdate", handleTimeUpdate);
+    return () => audio.removeEventListener("timeupdate", handleTimeUpdate);
+  }, []);
+  
 
   const contextValue = {
     audioRef,

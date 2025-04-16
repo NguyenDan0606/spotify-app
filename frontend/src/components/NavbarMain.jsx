@@ -8,7 +8,7 @@ const NavbarMain = () => {
   const toggleMenu = () => setShowMenu(!showMenu);
 
   return (
-    <div className="h-14 w-full flex justify-between items-center px-6 bg-black text-white font-medium pt-2">
+    <div className="h-[7%] w-full flex justify-between items-center px-6 bg-black text-white font-medium pt-2">
       {/* Bên trái */}
       <div className="flex items-center gap-4 pl-[50px]">
         <div className="relative group w-fit">
