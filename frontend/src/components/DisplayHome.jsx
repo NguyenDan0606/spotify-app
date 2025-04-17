@@ -1,4 +1,5 @@
 import Navbar from "./Navbar"
+import Footer from "./Footer"
 import { albumsData } from "../assets/assets"
 import AlbumItem from "./AlbumItem"
 import { songsData } from "../assets/assets"
@@ -29,6 +30,7 @@ const DisplayHome = () => {
         image={item.image}/>))}
         </div>
     </div>
+    <Footer />
     </>
     
   )
