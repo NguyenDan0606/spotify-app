@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets";
 
 const Navbar = () => {
@@ -47,7 +47,15 @@ const Navbar = () => {
             {showMenu && (
               <div className="absolute right-0 top-10 bg-[#1e1e1e] text-white rounded-lg shadow-lg w-60 py-2 z-10">
                 <div className="px-4 py-2 hover:bg-[#333] cursor-pointer flex items-center">
-                  Tài Khoản
+                  <Link to="/login"> Đăng nhập </Link>
+                  <img className="w-4 ml-auto" src={assets.home_icon} alt="" />
+                </div>
+                <div className="px-4 py-2 hover:bg-[#333] cursor-pointer flex items-center">
+                  <Link to="/register"> Đăng kí </Link>
+                  <img className="w-4 ml-auto" src={assets.home_icon} alt="" />
+                </div>
+                <div className="px-4 py-2 hover:bg-[#333] cursor-pointer flex items-center">
+                <Link to="/profile"> Tài khoản </Link>
                   <img className="w-4 ml-auto" src={assets.home_icon} alt="" />
                 </div>
                 <div className="px-4 py-2 hover:bg-[#333] cursor-pointer flex items-center">
@@ -71,7 +79,7 @@ const Navbar = () => {
                   <img className="w-4 ml-auto" src={assets.home_icon} alt="" />
                 </div>
                 <div className="px-4 py-2 hover:bg-[#333] cursor-pointer flex items-center text-red-400">
-                  Đăng Xuất
+                  <Link to="/logout"> Đăng xuất </Link>
                   <img className="w-4 ml-auto" src={assets.home_icon} alt="" />
                 </div>
               </div>
@@ -83,8 +91,12 @@ const Navbar = () => {
       {/* Tab Filter */}
       <div className="flex items-center gap-2 mt-4">
         <p className="bg-white text-black px-4 py-1 rounded-2xl">All</p>
-        <p className="bg-[#242424] cursor-pointer px-4 py-1 rounded-2xl">Music</p>
-        <p className="bg-[#242424] cursor-pointer px-4 py-1 rounded-2xl">Podcasts</p>
+        <p className="bg-[#242424] cursor-pointer px-4 py-1 rounded-2xl">
+          Music
+        </p>
+        <p className="bg-[#242424] cursor-pointer px-4 py-1 rounded-2xl">
+          Podcasts
+        </p>
       </div>
     </>
   );
