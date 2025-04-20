@@ -1,27 +1,40 @@
-import { useContext } from "react"
-import Display from "./components/Display"
-import Player from "./components/Player"
-import Sidebar from "./components/Sidebar"
-import NavbarMain from "./components/NavbarMain"
-import Video from "./components/Video"
-import { PlayerContext } from "./context/PlayerContext"
 
-const App = () => {
-  const {audioRef,track} = useContext(PlayerContext)
-  return (
-    <div className="h-screen bg-black overflow-x-hidden">
-      <NavbarMain />
-      <div className="h-[82%] flex">
-        <Sidebar/>
-        <Display/>
-        <Video />
-      </div>
-      <Player/>
-      <audio ref={audioRef} src={track.file} preload="auto">
+import { Routes, Navigate, Route } from "react-router-dom";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import NotFound from "./pages/NotFound";
+import Home from "./pages/Home";
+import Profile from "./pages/Profile";
+import ProtectedRoute from "./components/ProtectedRoute";
 
-      </audio>
-    </div>
-  )
+function Logout() {
+  localStorage.clear();
+  return <Navigate to="/login" />;
 }
 
-export default App
+function RegisterAndLogout() {
+  localStorage.clear();
+  return <Register />;
+}
+
+const App = () => {
+  return (
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        }
+      />
+      <Route path="/login" element={<Login />} />
+      <Route path="/logout" element={<Logout />} />
+      <Route path="/register" element={<RegisterAndLogout />} />
+      <Route path="/profile" element={<Profile />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+};
+
+export default App;
