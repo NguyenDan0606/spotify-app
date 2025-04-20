@@ -8,8 +8,8 @@ const Player = () => {
     toggleMute,
     volume,
     handleVolumeChange,
-    seekBar,
-    seekBg,
+    // seekBar,
+    // seekBg,
     playStatus,
     play,
     pause,
@@ -18,6 +18,7 @@ const Player = () => {
     previous,
     next,
     seekSong,
+    audioRef,
   } = useContext(PlayerContext);
 
   const [liked, setLiked] = useState(false);
@@ -26,8 +27,7 @@ const Player = () => {
   };
 
   return (
-    <div className="h-[10%] bg-black flex justify-between items-center text-white px-4">
-      
+    <div className="relative h-[10%] w-full bg-black flex justify-between items-center text-white px-4">
       {/* Left section: Track info + Like button */}
       <div className="hidden lg:flex items-center gap-4">
         <img className="w-12" src={track.image} alt="song_Data" />
@@ -57,7 +57,7 @@ const Player = () => {
       </div>
 
       {/* Center section: Controls + Seekbar */}
-      <div className="flex flex-col items-center gap-1 m-auto">
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-1 m-auto">
         <div className="flex gap-4">
           {/* Bật Trộn Bài */}
           <div className="relative group">
@@ -112,20 +112,16 @@ const Player = () => {
           </div>
         </div>
         <div className="flex items-center gap-5">
-          <p>
-            {time.currentTime.minute}:{String(time.currentTime.second).padStart(2, "0")}
-          </p>
-          <div
-            ref={seekBg}
-            onClick={seekSong}
-            className="w-[60vw] max-w-[500px] bg-gray-300 rounded-full cursor-pointer"
-          >
-            <hr
-              ref={seekBar}
-              className="h-1 border-none w-0 bg-green-800 rounded-full"
-            />
-          </div>
-          <p>{time.totalTime.minute}:{String(time.totalTime.second)}</p>
+          <p>{time.currentTime.minute}:{String(time.currentTime.second).padStart(2, "0")}</p>              
+          <input
+            type="range"
+            min="0"
+            max={audioRef.current?.duration || 1}
+            value={audioRef.current?.currentTime || 0}
+            onChange={seekSong}
+            className="w-[60vw] max-w-[500px] h-1 accent-green-500 cursor-pointer"
+          />
+          <p>{time.remainingTime.minute}:{String(time.remainingTime.second).padStart(2, "0")}</p>
         </div>
       </div>
 

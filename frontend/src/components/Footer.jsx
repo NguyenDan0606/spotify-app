@@ -41,34 +41,34 @@ const Footer = () => {
                     <a href="https://www.instagram.com/spotify" 
                         target="_blank" 
                         rel="noopener noreferrer" 
-                        className="w-8 h-8 rounded-full bg-neutral-700 flex items-center justify-center hover:bg-neutral-500 group transition duration-300"
+                        className="w-6 h-6 rounded-full bg-neutral-700 flex items-center justify-center hover:bg-neutral-500 group transition duration-300"
                     >
                         <img 
                             src={assets.instagram_icon} 
                             alt="instagram" 
-                            className="w-4 h-4 filter group-hover:brightness-0 group-hover:invert transition duration-300 invert"
+                            className="w-3 h-3 filter group-hover:brightness-0 group-hover:invert transition duration-300 invert"
                         />
                     </a>
                     <a href="https://x.com/spotify" 
                         target="_blank" 
                         rel="noopener noreferrer" 
-                        className="w-8 h-8 rounded-full bg-neutral-700 flex items-center justify-center hover:bg-neutral-500 group transition duration-300"
+                        className="w-6 h-6 rounded-full bg-neutral-700 flex items-center justify-center hover:bg-neutral-500 group transition duration-300"
                     >
                         <img 
                             src={assets.twitter_icon} 
                             alt="twitter" 
-                            className="w-4 h-4 filter group-hover:brightness-0 group-hover:invert transition duration-300 invert"
+                            className="w-3 h-3 filter group-hover:brightness-0 group-hover:invert transition duration-300 invert"
                         />
                     </a>
                     <a href="https://www.facebook.com/SpotifyVietnam/?brand_redir=6243987495#" 
                         target="_blank" 
                         rel="noopener noreferrer" 
-                        className="w-8 h-8 rounded-full bg-neutral-700 flex items-center justify-center hover:bg-neutral-500 group transition duration-300"
+                        className="w-6 h-6 rounded-full bg-neutral-700 flex items-center justify-center hover:bg-neutral-500 group transition duration-300"
                     >
                         <img 
                             src={assets.facebook_icon} 
                             alt="facebook" 
-                            className="w-4 h-4 filter group-hover:brightness-0 group-hover:invert transition duration-300 invert"
+                            className="w-3 h-3 filter group-hover:brightness-0 group-hover:invert transition duration-300 invert"
                         />
                     </a>
                 </div>

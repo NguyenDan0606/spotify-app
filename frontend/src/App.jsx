@@ -3,16 +3,18 @@ import Display from "./components/Display"
 import Player from "./components/Player"
 import Sidebar from "./components/Sidebar"
 import NavbarMain from "./components/NavbarMain"
+import Video from "./components/Video"
 import { PlayerContext } from "./context/PlayerContext"
 
 const App = () => {
   const {audioRef,track} = useContext(PlayerContext)
   return (
-    <div className="h-screen bg-black">
+    <div className="h-screen bg-black overflow-x-hidden">
       <NavbarMain />
       <div className="h-[82%] flex">
         <Sidebar/>
         <Display/>
+        <Video />
       </div>
       <Player/>
       <audio ref={audioRef} src={track.file} preload="auto">
