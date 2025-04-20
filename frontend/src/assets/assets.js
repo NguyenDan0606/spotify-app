@@ -27,6 +27,9 @@ import external_icon from './external.png'
 import heart_icon from './heart.png'
 import heartlove_icon from './heartlove.png'
 import mute_icon from './mute.png'
+import facebook_icon from './facebook.png'
+import instagram_icon from './instagram.png'
+import twitter_icon from './twitter.png'
 import img1 from './img1.jpg'
 import img2 from './img2.jpg'
 import img3 from './img3.jpg'
@@ -79,6 +82,9 @@ export const assets = {
     heart_icon,
     heartlove_icon,
     mute_icon,
+    facebook_icon,
+    instagram_icon,
+    twitter_icon,
     clock_icon
 }
 

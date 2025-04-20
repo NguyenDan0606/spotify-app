@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 import { albumsData, assets, songsData } from "../assets/assets";
 import { useContext } from "react";
 import { PlayerContext } from "../context/PlayerContext";
@@ -48,6 +49,7 @@ const DisplayAlbum = () => {
           <p className="text-[15px] text-center">{item.duration}</p>
         </div>
       ))}
+      <Footer />
     </div>
 
   );

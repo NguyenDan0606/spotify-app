@@ -61,7 +61,7 @@ const Sidebar = () => {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             rows={4}
-            className="w-full p-3 rounded bg-[#121212] text-white border border-gray-600 focus:outline-none focus:border-white"
+            className="w-full p-3 rounded bg-[#121212] text-white border border-gray-600 focus:outline-none focus:border-white resize-none"
           />
           <button
             onClick={handleSend}
