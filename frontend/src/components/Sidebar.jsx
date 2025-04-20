@@ -53,7 +53,6 @@ const Sidebar = () => {
           <p className="font-light text-[14px]">Chúng tôi sẽ cập nhật cho bạn thông tin về các tập mới</p>
           <button className="px-4 py-1.5 bg-white text-black rounded-full mt-4 hover:scale-105">Duyệt xem podcasts</button>
         </div>
-
         <div className="p-4 bg-[#242424] m-2 mt-auto rounded flex flex-col gap-2">
           <textarea
             type="text"

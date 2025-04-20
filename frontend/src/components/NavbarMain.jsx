@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Link} from "react-router-dom";
 import { assets } from "../assets/assets";
 
 const NavbarMain = () => {
@@ -83,6 +83,18 @@ const NavbarMain = () => {
           {showMenu && (
               <div className="absolute right-0 top-10 bg-[#1e1e1e] text-white rounded-lg shadow-lg w-60 py-2 z-10">
                 <div className="px-4 py-2 hover:bg-[#333] cursor-pointer flex items-center">
+                  <Link to="/login"> Đăng nhập </Link>
+                  <img className="w-4 ml-auto" src={assets.home_icon} alt="" />
+                </div>
+                <div className="px-4 py-2 hover:bg-[#333] cursor-pointer flex items-center">
+                  <Link to="/register"> Đăng kí </Link>
+                  <img className="w-4 ml-auto" src={assets.home_icon} alt="" />
+                </div>
+                <div className="px-4 py-2 hover:bg-[#333] cursor-pointer flex items-center">
+                <Link to="/profile"> Tài khoản </Link>
+                  <img className="w-4 ml-auto" src={assets.home_icon} alt="" />
+                </div>
+                <div className="px-4 py-2 hover:bg-[#333] cursor-pointer flex items-center">
                   Tài Khoản
                   <img className="invert w-4 ml-auto" src={assets.external_icon} alt="external" />
                 </div>
@@ -104,8 +116,9 @@ const NavbarMain = () => {
                 <div className="px-4 py-2 hover:bg-[#333] cursor-pointer flex items-center">
                   Cài Đặt
                 </div>
-                <div className="px-4 py-2 hover:bg-[#333] cursor-pointer flex items-center">
-                  Đăng Xuất
+                <div className="px-4 py-2 hover:bg-[#333] cursor-pointer flex items-center text-red-400">
+                  <Link to="/logout"> Đăng xuất </Link>
+                  <img className="w-4 ml-auto" src={assets.home_icon} alt="" />
                 </div>
               </div>
             )}

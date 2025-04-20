@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { createContext, useEffect, useRef, useState } from "react";
 import { songsData } from "../assets/assets";
 
@@ -85,6 +86,9 @@ const PlayerContextProvider = (props) => {
 
   useEffect(() => {
     const audio = audioRef.current;
+  
+    if (!audio) return; // fix ở đây
+  
     const handleLoadedMetadata = () => {
       setTime(prev => ({
         ...prev,
@@ -96,7 +100,9 @@ const PlayerContextProvider = (props) => {
     };
   
     audio.addEventListener("loadedmetadata", handleLoadedMetadata);
-    return () => audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
+    return () => {
+      audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
+    };
   }, []);
 
   useEffect(() => {
@@ -176,8 +182,10 @@ const PlayerContextProvider = (props) => {
   return (
     <PlayerContext.Provider value={contextValue}>
       {props.children}
+      <audio ref={audioRef} src={track.url} />
     </PlayerContext.Provider>
   );
+  
 };
 
 export default PlayerContextProvider;
