@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate,Link} from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { assets } from "../assets/assets";
 
 const NavbarMain = () => {
@@ -12,8 +12,10 @@ const NavbarMain = () => {
       {/* Bên trái */}
       <div className="flex items-center gap-4 pl-[50px]">
         <div className="relative group w-fit">
-          <button onClick={() => navigate("/")} 
-            className="flex items-center justify-center">
+          <button
+            onClick={() => navigate("/")}
+            className="flex items-center justify-center"
+          >
             <img className="w-9 h-9" src={assets.spotify_icon} alt="Spotify" />
           </button>
           <div className="absolute top-full left-1/2 -stranslate-x-1/2 mb-2 px-3 py-1 bg-[#242424] text-white font-bold test-sm rounded shadow opacity-0 group-hover:opacity-100 transition duration-200 whitespace-nowrap pointer-events-none">
@@ -22,18 +24,24 @@ const NavbarMain = () => {
         </div>
 
         <div className="relative group w-fit">
-          <button onClick={() => navigate("/")}
-            className="bg-[#2a2a2a] w-11 h-11 flex items-center justify-center rounded-full hover:bg-[#3a3a3a] transition">
+          <button
+            onClick={() => navigate("/")}
+            className="bg-[#2a2a2a] w-11 h-11 flex items-center justify-center rounded-full hover:bg-[#3a3a3a] transition"
+          >
             <img className="w-6 h-6" src={assets.home_icon} alt="Home" />
           </button>
           <div className="absolute top-full left-1/2 -stranslate-x-1/2 mb-2 px-3 py-1 bg-[#242424] text-white font-bold test-sm rounded shadow opacity-0 group-hover:opacity-100 transition duration-200 whitespace-nowrap pointer-events-none">
             Trang chủ
           </div>
         </div>
-        
+
         <div className="hidden md:flex items-center bg-[#2a2a2a] rounded-full px-4 py-2 w-[400px] h-11">
           <div className="relative group w-fit">
-            <img src={assets.search_icon} alt="search" className="w-6 h-6 mr-2" />
+            <img
+              src={assets.search_icon}
+              alt="search"
+              className="w-6 h-6 mr-2"
+            />
             <div className="absolute top-full left-1/2 -stranslate-x-1/2 mb-2 px-3 py-1 bg-[#242424] text-white font-bold test-sm rounded shadow opacity-0 group-hover:opacity-100 transition duration-200 whitespace-nowrap pointer-events-none">
               Tìm kiếm
             </div>
@@ -58,7 +66,11 @@ const NavbarMain = () => {
         </div>
 
         <button className="text-white text-base hover:underline hidden md:flex items-center gap-2 hover:scale-105">
-          <img className="invert" src={assets.downloading_icon} alt="downloading" />
+          <img
+            className="invert"
+            src={assets.downloading_icon}
+            alt="downloading"
+          />
           Cài đặt Ứng dụng
         </button>
 
@@ -66,11 +78,11 @@ const NavbarMain = () => {
           <button className="bg-[#2a2a2a] w-11 h-11 flex items-center justify-center rounded-full hover:bg-[#3a3a3a] transition">
             <img className="w-6 h-6" src={assets.bell_icon} alt="bell" />
           </button>
-          <div className="absolute top-full left-1/2 -stranslate-x-1/2 mb-2 px-3 py-1 bg-[#242424] text-white font-bold test-sm rounded shadow opacity-0 group-hover:opacity-100 transition duration-200 whitespace-nowrap pointer-events-none">
+          <div className="absolute top-full left-1/2 -stranslate-x-1/2 mb-2 px-3 py-1 bg-[#242424] text-white font-bold test-sm rounded shadow opacity-0 group-hover:opacity-100 transition duration-200 whitespace-nowrap pointer-events-none z-50">
             Bản phát hành mới
           </div>
         </div>
-        
+
         <div className="bg-[#2a2a2a] w-11 h-11 flex items-center justify-center rounded-full hover:bg-[#3a3a3a] transition">
           <div className="bg-black rounded-full p-[3px]">
             <button
@@ -81,47 +93,43 @@ const NavbarMain = () => {
             </button>
           </div>
           {showMenu && (
-              <div className="absolute right-0 top-10 bg-[#1e1e1e] text-white rounded-lg shadow-lg w-60 py-2 z-10">
-                <div className="px-4 py-2 hover:bg-[#333] cursor-pointer flex items-center">
-                  <Link to="/login"> Đăng nhập </Link>
-                  <img className="w-4 ml-auto" src={assets.home_icon} alt="" />
-                </div>
-                <div className="px-4 py-2 hover:bg-[#333] cursor-pointer flex items-center">
-                  <Link to="/register"> Đăng kí </Link>
-                  <img className="w-4 ml-auto" src={assets.home_icon} alt="" />
-                </div>
-                <div className="px-4 py-2 hover:bg-[#333] cursor-pointer flex items-center">
-                <Link to="/profile"> Tài khoản </Link>
-                  <img className="w-4 ml-auto" src={assets.home_icon} alt="" />
-                </div>
-                <div className="px-4 py-2 hover:bg-[#333] cursor-pointer flex items-center">
-                  Tài Khoản
-                  <img className="invert w-4 ml-auto" src={assets.external_icon} alt="external" />
-                </div>
-                <div className="px-4 py-2 hover:bg-[#333] cursor-pointer flex items-center">
-                  Hồ Sơ
-                </div>
-                <div className="px-4 py-2 hover:bg-[#333] cursor-pointer flex items-center">
-                  Nâng cấp Premium
-                  <img className="invert w-4 ml-auto" src={assets.external_icon} alt="external" />
-                </div>
-                <div className="px-4 py-2 hover:bg-[#333] cursor-pointer flex items-center">
-                  Hỗ Trợ
-                  <img className="invert w-4 ml-auto" src={assets.external_icon} alt="external" />
-                </div>
-                <div className="px-4 py-2 hover:bg-[#333] cursor-pointer flex items-center">
-                  Tải Xuống
-                  <img className="invert w-4 ml-auto" src={assets.external_icon} alt="external" />
-                </div>
-                <div className="px-4 py-2 hover:bg-[#333] cursor-pointer flex items-center">
-                  Cài Đặt
-                </div>
-                <div className="px-4 py-2 hover:bg-[#333] cursor-pointer flex items-center text-red-400">
-                  <Link to="/logout"> Đăng xuất </Link>
-                  <img className="w-4 ml-auto" src={assets.home_icon} alt="" />
-                </div>
+            <div className="absolute right-0 top-10 bg-[#1e1e1e] text-white rounded-lg shadow-lg w-60 py-2 z-10">
+              <div className="px-4 py-2 hover:bg-[#333] cursor-pointer flex items-center">
+                <Link to="/profile"> Hồ Sơ </Link>
+                {/* <img className="w-4 ml-auto" src={assets.external_iconn} alt="" /> */}
               </div>
-            )}
+              <div className="px-4 py-2 hover:bg-[#333] cursor-pointer flex items-center">
+                Nâng cấp Premium
+                <img
+                  className="invert w-4 ml-auto"
+                  src={assets.external_icon}
+                  alt="external"
+                />
+              </div>
+              <div className="px-4 py-2 hover:bg-[#333] cursor-pointer flex items-center">
+                Hỗ Trợ
+                <img
+                  className="invert w-4 ml-auto"
+                  src={assets.external_icon}
+                  alt="external"
+                />
+              </div>
+              <div className="px-4 py-2 hover:bg-[#333] cursor-pointer flex items-center">
+                Tải Xuống
+                <img
+                  className="invert w-4 ml-auto"
+                  src={assets.external_icon}
+                  alt="external"
+                />
+              </div>
+              <div className="px-4 py-2 hover:bg-[#333] cursor-pointer flex items-center">
+                Cài Đặt
+              </div>
+              <div className="px-4 py-2 hover:bg-[#333] cursor-pointer flex items-center text-red-400">
+                <Link to="/logout"> Đăng xuất </Link>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
