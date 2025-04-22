@@ -1,6 +1,6 @@
 import { useState } from "react";
 import api from "../api";
-import { useNavigate,Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constans";
 
 function Login() {
@@ -10,45 +10,67 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const res = await api.post("/api/token/", { username, password });
       localStorage.setItem(ACCESS_TOKEN, res.data.access);
       localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
       navigate("/");
-      console.log("Login success:", res.data);
     } catch (error) {
-      alert("Login failed. Please check credentials.");
+      alert("Đăng nhập thất bại. Vui lòng kiểm tra lại.");
       console.error(error);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="form-container">
-      <h1>Login</h1>
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-zinc-900 to-black text-white">
+      <div className="bg-zinc-900 p-10 rounded-lg shadow-md w-full max-w-md">
+        <div className="flex flex-col items-center mb-8">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/8/84/Spotify_icon.svg" alt="Spotify" className="w-16 h-16 mb-2" />
+          <h2 className="text-2xl font-bold">Đăng nhập vào Spotify</h2>
+        </div>
 
-      <input
-        className="form-input"
-        type="text"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        placeholder="User Name"
-      />
+        <hr className="my-6 border-gray-700" />
 
-      <input
-        className="form-input"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
-      />
+        <form onSubmit={handleSubmit} className="space-y-2  ">
+          <label className="text-sm font-semibold block">Email hoặc tên người dùng</label>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Email hoặc tên người dùng"
+            className="w-full px-4 py-2 rounded bg-white text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+          />
+          <label className="text-sm font-semibold block">Mật khẩu</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Mật khẩu"
+            className="w-full px-4 py-2 rounded bg-white text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+          />
 
-      <button className="form-button" type="submit">Login</button>
-      <p className="form-text">
-        Bạn chưa có tài khoản?{" "}
-        <Link to="/register" className="form-link">Đăng ký ngay</Link>
-      </p>
-    </form>
+          <p className="text-sm text-gray-400 mt-6">
+            <Link to="/register" className="text-white underline hover:text-green-400">
+              Quên mật khẩu
+            </Link>
+          </p>
+
+          <button
+            type="submit"
+            className="w-full bg-green-500 text-black py-2 rounded-full font-bold hover:bg-green-400 transition"
+          >
+            Đăng nhập
+          </button>
+        </form>
+
+        <p className="text-center text-sm text-gray-400 mt-6">
+          Bạn chưa có tài khoản?{" "}
+          <Link to="/register" className="text-white underline hover:text-green-400">
+            Đăng ký Spotify
+          </Link>
+        </p>
+      </div>
+    </div>
   );
 }
 

@@ -4,7 +4,6 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
 import Home from "./pages/Home";
-import Profile from "./pages/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function Logout() {
@@ -21,7 +20,7 @@ const App = () => {
   return (
     <Routes>
       <Route
-        path="/"
+        path="/*"
         element={
           <ProtectedRoute>
             <Home />
@@ -31,7 +30,6 @@ const App = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/logout" element={<Logout />} />
       <Route path="/register" element={<RegisterAndLogout />} />
-      <Route path="/profile" element={<Profile />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

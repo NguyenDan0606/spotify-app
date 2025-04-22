@@ -1,17 +1,17 @@
 /* eslint-disable react/prop-types */
 import { createContext, useEffect, useRef, useState } from "react";
-import { songsData } from "../assets/assets";
 
 export const PlayerContext = createContext();
 
 const PlayerContextProvider = (props) => {
+
   const audioRef = useRef();
   const seekBg = useRef();
   const seekBar = useRef();
 
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(1);
-  const [track, setTrack] = useState(songsData[0]);
+  const [track, setTrack] = useState();
   const [seekValue, setSeekValue] = useState(0);
   const [playStatus, setPlayStatus] = useState(false);
   const [time, setTime] = useState({
@@ -32,6 +32,7 @@ const PlayerContextProvider = (props) => {
   const play = () => {
     audioRef.current.play();
     setPlayStatus(true);
+    
   }
 
   const pause = () => {
@@ -39,29 +40,49 @@ const PlayerContextProvider = (props) => {
     setPlayStatus(false);
   }
 
+  const [songs, setSongs] = useState([]);
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:8000/api/songs/")  
+      .then(response => response.json())
+      .then(data => setSongs(data))
+      .catch(error => console.error("Lỗi khi load songs:", error));
+  }, []);
+
   const playWithId = (id) => {
-    setTrack(songsData[id]);
-    setTimeout(() => {
-      audioRef.current.play();
-      setPlayStatus(true);
-    }, 100);
-  }
-
-  const previous = async ()=> {
-    if (track.id>0) {
-        await setTrack(songsData[track.id-1]);
-        await audioRef.current.play();
+    const selected = songs.find(song => song.id === id);
+    if (selected) {
+      console.log("id bai hat: "+  audioRef.current)
+      setTrack(selected);
+      setTimeout(() => {  
+        audioRef.current.play();
         setPlayStatus(true);
+      }, 100);
     }
-  }
+  };
 
-  const next = async ()=> {
-    if (track.id< songsData.length-1) {
-        await setTrack(songsData[track.id+1]);
-        await audioRef.current.play();
+  const next = () => {
+    const currentIndex = songs.findIndex(s => s.id === track.id);
+    if (currentIndex < songs.length - 1) {
+      setTrack(songs[currentIndex + 1]);
+      setTimeout(() => {
+        audioRef.current.play();
         setPlayStatus(true);
+      }, 100);
     }
-  }
+  };
+  
+  const previous = () => {
+    const currentIndex = songs.findIndex(s => s.id === track.id);
+    if (currentIndex > 0) {
+      setTrack(songs[currentIndex - 1]);
+      setTimeout(() => {
+        audioRef.current.play();
+        setPlayStatus(true);
+      }, 100);
+    }
+  };
+  
 
   const seekSong = (e) => {
     const newTime = parseFloat(e.target.value);
@@ -182,7 +203,8 @@ const PlayerContextProvider = (props) => {
   return (
     <PlayerContext.Provider value={contextValue}>
       {props.children}
-      <audio ref={audioRef} src={track.url} />
+      <audio ref={audioRef} src={track?.audio_file} />
+
     </PlayerContext.Provider>
   );
   

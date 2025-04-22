@@ -1,0 +1,13 @@
+asgiref
+Django==4.2
+django-cors-headers
+djangorestframework
+djangorestframework-simplejwt
+PyJWT
+pytz
+sqlparse
+python-dotenv
+mysqlclient
+Pillow
+cloudinary
+django-cloudinary-storage
