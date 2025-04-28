@@ -15,10 +15,13 @@ export const PlayerProvider = ({ children }) => {
   const [isVideoSeekable, setIsVideoSeekable] = useState(false);
   const [track, setTrack] = useState(null);
   const [time, setTime] = useState({
+
     currentTime: { minute: 0, second: 0 },
     remainingTime: { minute: 0, second: 0 }
+
   });
   const [isMediaReady, setIsMediaReady] = useState(false);
+
 
   // Xác định isVideo dựa trên track hiện tại
   const isVideo = track?.audio_file?.endsWith(".mp4");
@@ -26,8 +29,10 @@ export const PlayerProvider = ({ children }) => {
   // Lấy ref hiện tại dựa trên loại media
   const getCurrentRef = () => isVideo ? videoRef.current : audioRef.current;
 
+
   // Fetch danh sách bài hát khi component mount
   useEffect(() => {
+
     const fetchSongs = async () => {
       try {
         const response = await fetch('http://127.0.0.1:8000/api/songs/');
@@ -142,6 +147,7 @@ export const PlayerProvider = ({ children }) => {
 
   // Xử lý khi một track kết thúc
   useEffect(() => {
+
     const handleTrackEnd = () => {
       console.log("Track ended, playing next");
       const newIndex = (currentSongIndex + 1) % songs.length;
@@ -172,6 +178,7 @@ export const PlayerProvider = ({ children }) => {
       }
     };
   }, [currentSongIndex, songs]);
+
 
   // Đồng bộ trạng thái play/pause từ media player
   useEffect(() => {
@@ -386,3 +393,4 @@ export const PlayerProvider = ({ children }) => {
     </PlayerContext.Provider>
   );
 };
+

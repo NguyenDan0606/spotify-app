@@ -1,18 +1,28 @@
-
 import { Routes, Navigate, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
 import Home from "./pages/Home";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { useUser } from "./context/UserContext";
+import { useEffect } from "react";
 
 function Logout() {
-  localStorage.clear();
+  const [, setUser] = useUser();
+
+  useEffect(() => {
+    localStorage.clear();
+    setUser(null);
+  }, [setUser]);
+
   return <Navigate to="/login" />;
 }
 
 function RegisterAndLogout() {
-  localStorage.clear();
+  useEffect(() => {
+    localStorage.clear();
+  }, []);
+
   return <Register />;
 }
 

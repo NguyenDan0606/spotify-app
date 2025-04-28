@@ -9,14 +9,29 @@ from django.contrib.auth import get_user_model
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', "password" , 'email','first_name','last_name', 'is_premium']
+        fields = ['id', 'username', "password" , 'email','first_name','last_name', 'is_premium', 'avatar']
         extra_kwargs = {"password": {"write_only": True}}
         
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
         return user
-
     
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        if instance.avatar:
+            data['avatar'] = str(instance.avatar)  # Luôn là URL string
+        return data
+    
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['last_name', 'avatar']
+        
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        if instance.avatar:
+            data['avatar'] = str(instance.avatar)  # Luôn là URL string
+        return data
 
 class ArtistSerializer(serializers.ModelSerializer):
     image_url = serializers.SerializerMethodField()

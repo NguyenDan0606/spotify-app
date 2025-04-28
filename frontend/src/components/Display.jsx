@@ -29,6 +29,7 @@ const Display = ({handleMusicClick, rightPanelVisible}) => {
         ${rightPanelVisible ? 'lg:w-[50%]' : 'lg:w-[74%]'}
         lg:ml-0 lg:mr-0
       `}
+
     >
       <Routes>
         <Route path="/" element={<DisplayHome handleMusicClick={handleMusicClick}/>} />

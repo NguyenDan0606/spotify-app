@@ -26,8 +26,10 @@ function Home() {
         <Display handleMusicClick={handleMusicClick} rightPanelVisible={rightPanelVisible}/>
         {rightPanelVisible && <Video key={track?.id}  isVideo={isVideo} track={track}/>}
       </div>
+
       <Player 
         handleMusicClick={handleMusicClick} setRightPanelVisible={setRightPanelVisible} 
+
       />
       
 

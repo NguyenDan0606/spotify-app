@@ -1,25 +1,48 @@
-from rest_framework import viewsets,generics
+from rest_framework import viewsets, generics, status
 from .models import *
 from .serializers import *
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import IsAuthenticated,AllowAny
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from cloudinary.uploader import upload
+
 
 User = get_user_model()
 class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer   
     permission_classes = [AllowAny]
+    
+    def get_serializer_context(self):
+        return {"request": self.request}  # Đảm bảo serializer có request context
 
 
 class ProfileView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        serializer = UserSerializer(request.user)
+        serializer = UserSerializer(request.user, context={"request": request})
         return Response(serializer.data)
-    
+
+    def patch(self, request):
+        user = request.user
+
+        # Cập nhật họ tên nếu có
+        last_name = request.data.get("last_name")
+        if last_name:
+            user.last_name = last_name
+
+        # Cập nhật avatar nếu có
+        avatar_file = request.FILES.get("avatar")
+        if avatar_file:
+            result = upload(avatar_file)
+            user.avatar = result.get("secure_url")  # Lưu đường dẫn ảnh từ Cloudinary
+
+        user.save()
+
+        serializer = UserSerializer(user, context={"request": request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
 class ArtistViewSet(viewsets.ModelViewSet):
     queryset = Artist.objects.all()

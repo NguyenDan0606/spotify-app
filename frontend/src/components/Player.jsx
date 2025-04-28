@@ -10,8 +10,6 @@ const Player = (props) => {
     toggleMute,
     volume,
     handleVolumeChange,
-    // seekBar,
-    // seekBg,
     playStatus,
     play,
     pause,
@@ -236,7 +234,7 @@ const Player = (props) => {
           </button>
           <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 bg-[#242424] text-white font-bold text-sm rounded shadow opacity-0 group-hover:opacity-100 transition duration-200 whitespace-nowrap pointer-events-none">
             Mở chế độ Toàn màn hình
-          </div>
+          </div>  
         </div>
       </div>
     </div>
