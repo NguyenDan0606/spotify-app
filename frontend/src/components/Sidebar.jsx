@@ -1,7 +1,9 @@
+/* eslint-disable react/prop-types */
 import { assets } from "../assets/assets";
 import { useState } from "react";
 
-const Sidebar = () => {
+const Sidebar = (props) => {
+  
   const [message, setMessage] = useState("");
   const [showThankYou, setShowThankYou] = useState(false);
 
@@ -20,7 +22,7 @@ const Sidebar = () => {
       <div className="bg-[#121212] h-[100%] rounded">
         <div className="p-3 flex items-center justify-between">
           <div className="relative group w-fit">
-            <button className="flex items-center gap-3">
+            <button className="flex items-center gap-3 text-gray-400 hover:text-white" onClick={() => props.setLeftPanelVisible(false)}>
               <img className="w-6" src={assets.stack_icon} alt="stack_icon" />
               <p className="font-bold text-[18px]">Thư viện</p>
             </button>

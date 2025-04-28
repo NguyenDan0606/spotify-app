@@ -1,10 +1,10 @@
+/* eslint-disable no-undef */
 /* eslint-disable react/prop-types */
 import { useContext, useState } from "react";
 import { assets } from "../assets/assets";
 import { PlayerContext } from "../context/PlayerContext";
 
 const Player = (props) => {
-
   const {
     isMuted,
     toggleMute,
@@ -21,13 +21,13 @@ const Player = (props) => {
     next,
     seekSong,
     audioRef,
+    
   } = useContext(PlayerContext);
 
   const [liked, setLiked] = useState(false);
   const toggleLike = () => {
     setLiked(!liked);
   };
-
 
   return (
     
@@ -167,7 +167,7 @@ const Player = (props) => {
       <div className="hidden lg:flex items-center gap-2 opacity-75">
         {/* Button Plays */}
         <div className="relative group">
-          <button className="p-1" onClick={()=>(props.handleMusicClick())} >
+          <button className="p-1" onClick={()=>(props.setRightPanelVisible(prev => !prev))} >
             <img className="w-4" src={assets.plays_icon} alt="Plays" />
           </button>
           <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 bg-[#242424] text-white font-bold text-sm rounded shadow opacity-0 group-hover:opacity-100 transition duration-200 whitespace-nowrap pointer-events-none">
