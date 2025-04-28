@@ -8,7 +8,8 @@ import  { useEffect, useState } from "react";
 
 
 
-const DisplayHome = () => {
+// eslint-disable-next-line react/prop-types
+const DisplayHome = ( {handleMusicClick}) => {
 
   const [albums, setAlbums] = useState([]);
 
@@ -51,7 +52,7 @@ const DisplayHome = () => {
         <h1 className="my-5 font-bold text-2xl">Những bài hát thịnh hành</h1>
         <div className="flex overflow-auto">
       {songs.map((item)=>(<SongItem key={item.id} name={item.title} duration={item.duration} id={item.id}
-        image={item.image_url}/>))}
+        image={item.image_url} handleMusicClick={handleMusicClick}/>))}
         </div>
     </div>
     <div className="mb-4">

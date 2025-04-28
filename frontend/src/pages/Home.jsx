@@ -9,27 +9,29 @@ import { useState } from "react";
 
 function Home() {
 
-  // const [activeMusicItemId,setActiveMusicItemId] = useState();
-  
-
-  const [showVideo,setShowVideo] = useState(false);
+ 
+  // const [leftPanelVisible, setLeftPanelVisible] = useState(true);
+  const [rightPanelVisible,setRightPanelVisible] = useState(false);
   const handleMusicClick = () => {
-    setShowVideo(!showVideo);
+    setRightPanelVisible(true);
   }
 
-  const { audioRef, track } = useContext(PlayerContext);
+  const { track, isVideo } = useContext(PlayerContext);
   return (
     <div className="h-screen bg-black overflow-x-hidden">
       <NavbarMain />
       <div className="h-[82%] flex">
-        <Sidebar />
-        <Display />
-        {showVideo && <Video />}
+        {/* {leftPanelVisible && <Sidebar setLeftPanelVisible={setLeftPanelVisible}/>} */}
+        <Sidebar/>
+        <Display handleMusicClick={handleMusicClick} rightPanelVisible={rightPanelVisible}/>
+        {rightPanelVisible && <Video key={track?.id}  isVideo={isVideo} track={track}/>}
       </div>
       <Player 
-        handleMusicClick={handleMusicClick}
+        handleMusicClick={handleMusicClick} setRightPanelVisible={setRightPanelVisible} 
       />
-      <audio ref={audioRef} src={track?.file} preload="auto"></audio>
+      
+
+      
     </div>
   );
 }
