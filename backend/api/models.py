@@ -6,6 +6,7 @@ class User(AbstractUser):
     email = models.EmailField(unique=True)
     is_premium = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now_add=True)
+    avatar = CloudinaryField('image', null=True, blank=True)
 
     REQUIRED_FIELDS = ['email']
 

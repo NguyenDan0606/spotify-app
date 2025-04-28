@@ -30,6 +30,7 @@ import mute_icon from './mute.png'
 import facebook_icon from './facebook.png'
 import instagram_icon from './instagram.png'
 import twitter_icon from './twitter.png'
+import user_icon from './user.png'
 import img1 from './img1.jpg'
 import img2 from './img2.jpg'
 import img3 from './img3.jpg'
@@ -85,6 +86,7 @@ export const assets = {
     facebook_icon,
     instagram_icon,
     twitter_icon,
+    user_icon,
     clock_icon
 }
 

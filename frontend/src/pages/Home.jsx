@@ -26,7 +26,7 @@ function Home() {
         <Display />
         {showVideo && <Video />}
       </div>
-      <Player 
+      <Player
         handleMusicClick={handleMusicClick}
       />
       <audio ref={audioRef} src={track?.file} preload="auto"></audio>
