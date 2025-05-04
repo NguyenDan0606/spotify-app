@@ -299,50 +299,35 @@ export const PlayerProvider = ({ children }) => {
   const seekSong = (e) => {
     const seekTime = parseFloat(e.target.value);
     const ref = getCurrentRef();
-    
-    if (isVideo) {
-      if (!isVideoSeekable) {
-        console.warn("Video không seekable, đang chờ video load");
-        return;
-      }
+  
+    if (!ref || isNaN(ref.duration)) return;
+    if (isVideo && !isVideoSeekable) {
+      console.warn("Video không seekable, đang chờ video load");
+      return;
+    }
+  
+    try {
+      console.log(`Seeking to ${seekTime} / ${ref.duration}`);
+      ref.currentTime = seekTime;
       
-      if (ref && !isNaN(ref.duration)) {
-        console.log(`Seeking video to ${seekTime} of ${ref.duration}`);
-        
-        try {
-          // Đặt currentTime cho video
-          ref.currentTime = seekTime;
-          
-          // Cập nhật thời gian hiển thị ngay lập tức
-          updateTimeDisplay(seekTime, ref.duration);
-        } catch (err) {
-          console.error("Error seeking video:", err);
-        }
-      }
-    } else {
-      // Xử lý audio như bình thường
-      if (ref && !isNaN(ref.duration)) {
-        ref.currentTime = seekTime;
-        updateTimeDisplay(seekTime, ref.duration);
-      }
+      setTime({
+        currentTime: {
+          minute: Math.floor(seekTime / 60),
+          second: Math.floor(seekTime % 60),
+        },
+        remainingTime: {
+          minute: Math.floor((ref.duration - seekTime) / 60),
+          second: Math.floor((ref.duration - seekTime) % 60),
+        },
+      });
+  
+    } catch (err) {
+      console.error("Error seeking media:", err);
     }
   };
   
-  // Hàm phụ trợ để cập nhật hiển thị thời gian
-  const updateTimeDisplay = (currentTime, duration) => {
-    const remainingTime = duration - currentTime;
-    
-    setTime({
-      currentTime: {
-        minute: Math.floor(currentTime / 60),
-        second: Math.floor(currentTime % 60)
-      },
-      remainingTime: {
-        minute: Math.floor(remainingTime / 60),
-        second: Math.floor(remainingTime % 60)
-      }
-    });
-  };
+  
+  
   const stopAll = () => {
     if (audioRef.current) {
       audioRef.current.pause();
@@ -384,7 +369,8 @@ export const PlayerProvider = ({ children }) => {
         playWithId,
         songs,
         isVideo,
-        isMediaReady
+        isMediaReady,
+
       }}
     >
       <audio ref={audioRef} style={{ display: "none" }} preload="auto" />

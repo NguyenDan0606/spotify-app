@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import (
-    User, Artist, Album, Song, Playlist, PlaylistSong,
+    User, Artist, Album, Song, Playlist,PlaylistSong,
     LikedSong, ArtistFollow, ListeningHistory, Comment
 )
 from django.contrib.auth import get_user_model
@@ -79,8 +79,8 @@ class AlbumSerializer(serializers.ModelSerializer):
 class SongSerializer(serializers.ModelSerializer):
     image_url = serializers.SerializerMethodField()
     audio_file = serializers.SerializerMethodField()
-    artists = ArtistSerializer(many=True, read_only=True)
-    album = AlbumSerializer(read_only=True)      
+    album = serializers.StringRelatedField()
+
     class Meta:
         model = Song
         fields = '__all__'
@@ -95,20 +95,27 @@ class SongSerializer(serializers.ModelSerializer):
             return obj.audio_file.url
         return None 
 
+    
+
+
+class PlaylistSerializer(serializers.ModelSerializer):
+    image_url_display = serializers.SerializerMethodField()  # <-- Đây là chỗ định nghĩa
+
+    class Meta:
+        model = Playlist
+        fields = '__all__'  # Gồm tất cả trường trong model + image_url_display
+        read_only_fields = ['user']
+
+    def get_image_url_display(self, obj):
+        if obj.image_url:
+            return obj.image_url.url  # Trả về full URL từ Cloudinary
+        return None
 
 class PlaylistSongSerializer(serializers.ModelSerializer):
     class Meta:
         model = PlaylistSong
         fields = '__all__'
-
-
-class PlaylistSerializer(serializers.ModelSerializer):
-    playlist_songs = PlaylistSongSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Playlist
-        fields = '__all__'
-
+    
 
 class LikedSongSerializer(serializers.ModelSerializer):
     class Meta:

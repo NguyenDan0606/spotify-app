@@ -1,3 +1,7 @@
+
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-refresh/only-export-components */
+// src/context/UserContext.jsx
 import { createContext, useContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import api from "../api";

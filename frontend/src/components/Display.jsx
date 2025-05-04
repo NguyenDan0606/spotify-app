@@ -4,6 +4,9 @@ import DisplayHome from "./DisplayHome";
 import Profile from "./Profile";
 import { useEffect, useRef } from "react";
 import { albumsData } from "../assets/assets";
+import LikedSong from "./LikedSong";
+import DetailArtist from "./DetailArtist";
+import PlayList from "./PlayList";
 
 // eslint-disable-next-line react/prop-types
 const Display = ({handleMusicClick, rightPanelVisible}) => {
@@ -35,6 +38,10 @@ const Display = ({handleMusicClick, rightPanelVisible}) => {
         <Route path="/" element={<DisplayHome handleMusicClick={handleMusicClick}/>} />
         {/* <Route path="/album/:id" element={<DisplayAlbum />} /> */}
         <Route path="/profile" element={<Profile />} />
+        <Route path="/likedSong" element={<LikedSong/>}/>
+        <Route path="/detailArtist/:artistId" element={<DetailArtist/>}/>
+        <Route path="/playlist/:playlistId" element={<PlayList/>}/>
+
       </Routes>
     </div>
   );

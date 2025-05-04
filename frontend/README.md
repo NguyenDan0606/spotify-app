@@ -64,3 +64,8 @@ This project is licensed under the MIT License.
 
 Special thanks to the GreatStack YouTube Channel for their invaluable tutorials and guidance.
 
+Thông báo đẹp:
+    npm install react-toastify
+Tự động tạo ảnh nền gradient:
+    npm install color-thief-browser
+

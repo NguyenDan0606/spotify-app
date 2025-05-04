@@ -1,28 +1,58 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { assets } from "../assets/assets";
-import { useState } from "react";
+import { useContext, useState, useEffect } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { ACCESS_TOKEN } from "../constans";
 
 const Sidebar = (props) => {
-  
-  const [message, setMessage] = useState("");
-  const [showThankYou, setShowThankYou] = useState(false);
+  const navigate = useNavigate();
+  const [playlists, setPlaylists] = useState([]);
+  const token = localStorage.getItem(ACCESS_TOKEN);
 
-  const handleSend = () => {
-    if (message.trim() !== "") {
-      setShowThankYou(true);
-      setTimeout(() => {
-        setShowThankYou(false);
-      }, 3000); // 3 giây sau ẩn thông báo
-      setMessage(""); // Xóa input sau khi gửi
-    }
-  };
+  useEffect(() => {
+    const fetchPlaylists = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8000/api/playlists/my-playlists/",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setPlaylists(response.data);
+      } catch (error) {
+        console.error("Lỗi khi lấy playlist:", error);
+      }
+    };
+
+    fetchPlaylists();
+  }, []);
+
+  // const [message, setMessage] = useState("");
+  // const [showThankYou, setShowThankYou] = useState(false);
+
+  // const handleSend = () => {
+  //   if (message.trim() !== "") {
+  //     setShowThankYou(true);
+  //     setTimeout(() => {
+  //       setShowThankYou(false);
+  //     }, 3000); // 3 giây sau ẩn thông báo
+  //     setMessage(""); // Xóa input sau khi gửi
+  //   }
+  // };
 
   return (
     <div className="w-[25%] h-full p-2 flex-col gap-2 text-white flex text-sm">
       <div className="bg-[#121212] h-[100%] rounded">
         <div className="p-3 flex items-center justify-between">
           <div className="relative group w-fit">
-            <button className="flex items-center gap-3 text-gray-400 hover:text-white" onClick={() => props.setLeftPanelVisible(false)}>
+            <button
+              className="flex items-center gap-3 text-gray-400 hover:text-white"
+              // onClick={() => props.setLeftPanelVisible(false)}
+            >
               <img className="w-6" src={assets.stack_icon} alt="stack_icon" />
               <p className="font-bold text-[18px]">Thư viện</p>
             </button>
@@ -33,7 +63,10 @@ const Sidebar = (props) => {
 
           <div className="flex items-center gap-2">
             <div className="relative group">
-              <button className="flex items-center justify-center gap-2 px-3 py-2 bg-[#242424] rounded-full cursor-pointer hover:brightness-125 transition duration-200">
+              <button
+                onClick={props.handlePlayListClick}
+                className="flex items-center justify-center gap-2 px-3 py-2 bg-[#242424] rounded-full cursor-pointer hover:brightness-125 transition duration-200"
+              >
                 <img className="w-3" src={assets.plus_icon} alt="plus_icon" />
                 <span className="text-sm font-semibold">Tạo</span>
               </button>
@@ -44,7 +77,36 @@ const Sidebar = (props) => {
           </div>
         </div>
 
-        <div className="p-4 bg-[#242424] m-2 rounded font-bold flex flex-col items-start justify-start gap-1 pl-4 text-[16px]">
+        <div
+          className="flex bg-slate-600 py-2 px-2 rounded mx-[1vw] cursor-pointer hover:bg-slate-400 mb-2"
+          onClick={() => navigate("/likedSong")}
+        >
+          <img
+            className="rounded size-12"
+            src="https://misc.scdn.co/liked-songs/liked-songs-64.png"
+            alt=""
+          />
+          <div className="pl-2 justify-between">
+            <p className="font-bold text-white ">Bài hát đã thích</p>
+          </div>
+        </div>
+        {playlists.map((playlist) => (
+          <div
+            key={playlist.id}
+            className="flex bg-slate-600 py-2 px-2 mb-2 rounded mx-[1vw] cursor-pointer hover:bg-slate-400 "
+            onClick={() => navigate(`/playlist/${playlist.id}`)}
+          >
+            <img
+              className="rounded size-12"
+              src={playlist.image_url_display}
+              alt="playlist"
+            />
+            <div className="pl-2 justify-between">
+              <p className="font-bold text-white ">{playlist.name}</p>
+            </div>
+          </div>
+        ))}
+        {/* <div className="p-4 bg-[#242424] m-2 rounded font-bold flex flex-col items-start justify-start gap-1 pl-4 text-[16px]">
           <h1>Tạo danh sách đầu tiên của bạn</h1>
           <p className="font-light text-[14px]">Rất dễ! Chúng tôi sẽ giúp bạn</p>
           <button className="px-4 py-1.5 bg-white text-black rounded-full mt-4 hover:scale-105">Tạo danh sách phát</button>
@@ -76,7 +138,7 @@ const Sidebar = (props) => {
               Cảm ơn bạn đã gửi tin nhắn!
             </p>
           )}
-        </div>
+        </div> */}
       </div>
     </div>
   );
