@@ -1,8 +1,12 @@
 /* eslint-disable no-undef */
 /* eslint-disable react/prop-types */
-import { useContext, useState } from "react";
+import { useContext, useState,useEffect } from "react";
 import { assets } from "../assets/assets";
 import { PlayerContext } from "../context/PlayerContext";
+import { ACCESS_TOKEN } from "../constans";
+import axios from "axios";
+import { toast } from "react-toastify";
+
 
 const Player = (props) => {
   const {
@@ -21,11 +25,66 @@ const Player = (props) => {
     audioRef,
     
   } = useContext(PlayerContext);
+  
+  
+  
+
+
 
   const [liked, setLiked] = useState(false);
-  const toggleLike = () => {
-    setLiked(!liked);
+  const token = localStorage.getItem(ACCESS_TOKEN);
+
+  useEffect(() => {
+    // Kiểm tra xem bài hát có trong danh sách yêu thích không
+    const checkLikedStatus = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/liked-songs/check-liked/${track.id}/`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        
+        // Cập nhật trạng thái dựa trên phản hồi từ server
+        setLiked(response.data.is_liked);
+      } catch (error) {
+        console.error("Lỗi khi kiểm tra trạng thái yêu thích:", error);
+      }
+    };
+    
+    checkLikedStatus();
+  }, [track, token]);
+
+  const toggleLike = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/liked-songs/toggle-like/",
+        { song_id: track.id },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, 
+          },
+        }
+      );
+
+      
+      // Update UI
+      if (response.data.message === "Liked") {
+        setLiked(true);
+        toast.success(`Đã thêm ${track.title} vào yêu thích`);
+
+      } else {
+        setLiked(false);
+        toast.error(`Đã xóa ${track.title} khỏi yêu thích`);
+
+      }
+    } catch (error) {
+      console.error("Lỗi khi like bài hát:", error);
+    }
   };
+
 
   return (
     
@@ -49,14 +108,14 @@ const Player = (props) => {
                 className={`w-4 h-4 transition-transform duration-300 ${
                   liked
                     ? "scale-105 animate-ping-once invert"
-                    : "invert scale-100"
+                    : "invert scale-100 "
                 }`}
                 src={liked ? assets.heartlove_icon : assets.heart_icon}
                 alt="like"
               />
             </button>
             <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 bg-[#242424] text-white font-bold text-sm rounded shadow opacity-0 group-hover:opacity-100 transition duration-200 whitespace-nowrap pointer-events-none">
-              Thêm vào Bài hát yêu thích
+              {liked ? 'Xóa khỏi bài hát yêu thích' : 'Thêm vào Bài hát yêu thích'}
             </div>
           </div>
         </div>
@@ -149,8 +208,8 @@ const Player = (props) => {
           <input
             type="range"
             min="0"
-            max={audioRef.current?.duration || 1}
-            value={audioRef.current?.currentTime || 0}
+            max={audioRef.current?.duration || 1 }
+            value={audioRef.current?.currentTime || 0 }
             onChange={seekSong}
             className="w-[60vw] max-w-[500px] h-1 accent-green-500 cursor-pointer"
           />

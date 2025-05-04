@@ -12,7 +12,7 @@ const Video = () => {
           <>
             <video
               ref={videoRef}
-              controls={false}
+              controls={true}
               className="w-[100%] max-h-[80%] object-contain"
             />
             <div className="font-bold mt-2 flex gap-2">

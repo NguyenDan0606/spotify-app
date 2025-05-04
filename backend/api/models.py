@@ -51,18 +51,19 @@ class Song(models.Model):
     
     
     
+    
 
 
 class Playlist(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='playlists')
     name = models.CharField(max_length=255)
+    image_url = CloudinaryField('image', null=True, blank=True)
     description = models.TextField(blank=True, null=True)
     is_public = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.name} by {self.user.username}"
-
 
 class PlaylistSong(models.Model):
     playlist = models.ForeignKey(Playlist, on_delete=models.CASCADE, related_name='playlist_songs')
@@ -71,7 +72,6 @@ class PlaylistSong(models.Model):
 
     class Meta:
         unique_together = ('playlist', 'song')
-
 
 class LikedSong(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='liked_songs')
