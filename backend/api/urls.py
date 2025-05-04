@@ -12,6 +12,7 @@ router.register(r'liked-songs', LikedSongViewSet)
 router.register(r'artist-follows', ArtistFollowViewSet)
 router.register(r'listening-history', ListeningHistoryViewSet)
 router.register(r'comments', CommentViewSet)
+router.register(r'users', UserViewSet)
 
 
 urlpatterns = [

@@ -5,7 +5,7 @@ import { ACCESS_TOKEN } from "../constans";
 import { useUser } from "../context/UserContext";
 
 function Profile() {
-  const [user, setUser, fetchUser] = useUser();
+  const [user, setUser, fetchUser] = useUser(); // ✅ thêm fetchUser
   const [lastName, setLastName] = useState("");
   const [avatarFile, setAvatarFile] = useState(null);
   const [avatarPreview, setAvatarPreview] = useState(null);
@@ -15,25 +15,15 @@ function Profile() {
   const token = localStorage.getItem(ACCESS_TOKEN);
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const res = await api.get("/api/profile/", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setUser(res.data);
-        setLastName(res.data.last_name || "");
-      } catch (err) {
-        console.error("Error fetching profile:", err);
-      }
-    };
-    fetchProfile();
-  }, [token]);
+    if (!user) {
+      fetchUser(); // ✅ gọi fetchUser nếu chưa có user
+    }
+  }, [user, fetchUser]);
 
   useEffect(() => {
     if (user) {
       setLastName(user.last_name ?? "");
+      setAvatarPreview(user.avatar || null);
     }
   }, [user]);
 
@@ -42,10 +32,22 @@ function Profile() {
     setIsDirty(true);
   };
 
+  const handleAvatarChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 10 * 1024 * 1024) {
+        alert("Vui lòng chọn ảnh nhỏ hơn 10MB");
+        return;
+      }
+      setAvatarFile(file);
+      setAvatarPreview(URL.createObjectURL(file));
+      setIsDirty(true);
+    }
+  };
+
   const handleSave = async () => {
     if (!isDirty) return;
     setIsSaving(true);
-
     try {
       const formData = new FormData();
       formData.append("last_name", lastName);
@@ -53,7 +55,7 @@ function Profile() {
         formData.append("avatar", avatarFile);
       }
 
-      await api.patch("/api/profile/", formData, {
+      const res = await api.patch("/api/profile/", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
@@ -61,8 +63,8 @@ function Profile() {
       });
 
       alert("Cập nhật hồ sơ thành công!");
-      await fetchUser(); // ✅ fetch lại user mới nhất từ server
-      setIsDirty(false);
+      setUser(res.data);
+      localStorage.setItem("avatar", res.data.avatar);
     } catch (error) {
       console.error("Update error:", error);
       alert("Cập nhật thất bại!");
@@ -76,7 +78,7 @@ function Profile() {
   }
 
   return (
-    <div className="h-[100%] bg-gradient-to-t from-green-300 to-zinc-700 flex items-center justify-center px-4">
+    <div className="h-full bg-gradient-to-t from-green-300 to-zinc-700 flex items-center justify-center px-4">
       <div className="bg-zinc-800 text-white p-8 rounded-2xl shadow-2xl w-full max-w-4xl relative">
         <h2 className="text-3xl font-bold text-center mb-6">Thông tin hồ sơ</h2>
 
@@ -86,7 +88,7 @@ function Profile() {
               <label className="text-sm text-gray-400 mb-1 block">Họ và tên</label>
               <input
                 type="text"
-                value={lastName ?? ""}
+                value={lastName}
                 onChange={handleLastNameChange}
                 className="w-full bg-zinc-700 rounded-xl p-3 outline-none focus:ring-2 focus:ring-green-400 transition"
                 placeholder="Nhập họ tên..."
@@ -97,7 +99,7 @@ function Profile() {
               <label className="text-sm text-gray-400 mb-1 block">Tên người dùng</label>
               <input
                 type="text"
-                value={user?.username ?? ""}
+                value={user.username}
                 readOnly
                 className="w-full bg-zinc-700 p-3 rounded-xl text-gray-400"
               />
@@ -107,7 +109,7 @@ function Profile() {
               <label className="text-sm text-gray-400 mb-1 block">Email</label>
               <input
                 type="email"
-                value={user?.email ?? ""}
+                value={user.email}
                 readOnly
                 className="w-full bg-zinc-700 p-3 rounded-xl text-gray-400"
               />
@@ -118,7 +120,7 @@ function Profile() {
               <input
                 type="text"
                 readOnly
-                value={user?.is_premium ? "✅ Đang dùng Premium" : "❌ Chưa đăng ký"}
+                value={user.is_premium ? "✅ Đang dùng Premium" : "❌ Chưa đăng ký"}
                 className="w-full bg-zinc-700 p-3 rounded-xl text-gray-400"
               />
             </div>
@@ -139,7 +141,7 @@ function Profile() {
           <div className="flex flex-col items-center justify-center">
             <label className="relative w-40 h-40 rounded-full overflow-hidden border-4 border-zinc-600 shadow-md mb-3 group cursor-pointer">
               <img
-                src={avatarPreview || user?.avatar || assets.user_icon}
+                src={avatarPreview || assets.user_icon}
                 alt="avatar"
                 className="w-full h-full object-cover"
               />
@@ -163,19 +165,7 @@ function Profile() {
               <input
                 type="file"
                 accept="image/*"
-                onChange={(e) => {
-                  const file = e.target.files[0];
-                  if (file) {
-                    if (file.size > 10 * 1024 * 1024) {
-                      alert("Vui lòng chọn ảnh nhỏ hơn 10MB");
-                      e.target.value = null;
-                      return;
-                    }
-                    setAvatarFile(file);
-                    setAvatarPreview(URL.createObjectURL(file));
-                    setIsDirty(true);
-                  }
-                }}
+                onChange={handleAvatarChange}
                 className="hidden"
               />
             </label>

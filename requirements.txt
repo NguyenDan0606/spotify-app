@@ -11,4 +11,3 @@ mysqlclient
 Pillow
 cloudinary
 django-cloudinary-storage
-prop-types

@@ -1,7 +1,7 @@
 import { Route, Routes, useLocation } from "react-router-dom";
 import DisplayHome from "./DisplayHome";
 // import DisplayAlbum from "./DisplayAlbum";
-// import Profile from "./Profile";
+import Profile from "./Profile";
 import { useEffect, useRef } from "react";
 import { albumsData } from "../assets/assets";
 
@@ -33,8 +33,8 @@ const Display = ({handleMusicClick, rightPanelVisible}) => {
     >
       <Routes>
         <Route path="/" element={<DisplayHome handleMusicClick={handleMusicClick}/>} />
-        {/* <Route path="/album/:id" element={<DisplayAlbum />} />
-        <Route path="/profile" element={<Profile />} /> */}
+        {/* <Route path="/album/:id" element={<DisplayAlbum />} /> */}
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </div>
   );

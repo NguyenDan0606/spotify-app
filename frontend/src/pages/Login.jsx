@@ -2,18 +2,31 @@ import { useState } from "react";
 import api from "../api";
 import { useNavigate, Link } from "react-router-dom";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constans";
+import { useUser } from "../context/UserContext";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const [, setUser, fetchUser] = useUser(); // ✅ thêm fetchUser
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const res = await api.post("/api/token/", { username, password });
-      localStorage.setItem(ACCESS_TOKEN, res.data.access);
-      localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
+      const { access, refresh } = res.data;
+      localStorage.setItem(ACCESS_TOKEN, access);
+      localStorage.setItem(REFRESH_TOKEN, refresh);
+
+      const profileRes = await api.get("/api/profile/");
+      const userData = profileRes.data;
+
+      setUser(userData);         // ✅ cập nhật context
+      fetchUser();               // ✅ gọi lại fetchUser() để đảm bảo đầy đủ avatar, email...
+
+      localStorage.setItem("avatar", userData.avatar || "");
+      localStorage.setItem("username", userData.username || "");
+
       navigate("/");
     } catch (error) {
       alert("Đăng nhập thất bại. Vui lòng kiểm tra lại.");
@@ -31,7 +44,7 @@ function Login() {
 
         <hr className="my-6 border-gray-700" />
 
-        <form onSubmit={handleSubmit} className="space-y-2  ">
+        <form onSubmit={handleSubmit} className="space-y-2">
           <label className="text-sm font-semibold block">Email hoặc tên người dùng</label>
           <input
             type="text"

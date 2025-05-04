@@ -18,7 +18,7 @@ const Sidebar = (props) => {
   };
 
   return (
-    <div className="w-[25%] h-full p-2 flex-col gap-2  text-white flex text-sm">
+    <div className="w-[25%] h-full p-2 flex-col gap-2 text-white flex text-sm">
       <div className="bg-[#121212] h-[100%] rounded">
         <div className="p-3 flex items-center justify-between">
           <div className="relative group w-fit">
