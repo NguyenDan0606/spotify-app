@@ -3,10 +3,18 @@ from django.contrib.auth.models import AbstractUser
 from cloudinary.models import CloudinaryField
 
 class User(AbstractUser):
+    
+    ROLE_CHOICES = (
+        ('user', 'User'),
+        ('admin', 'Admin'),
+        ('artist', 'Artist'),
+    )
+    
     email = models.EmailField(unique=True)
     is_premium = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now_add=True)
     avatar = CloudinaryField('image', null=True, blank=True)
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='user')
 
     REQUIRED_FIELDS = ['email']
 
@@ -27,7 +35,7 @@ class Artist(models.Model):
 
 class Album(models.Model):
     title = models.CharField(max_length=255)
-    artist = models.ManyToManyField(Artist, blank=True, related_name='albums')
+    artists = models.ManyToManyField(Artist, blank=True, related_name='albums')
     release_date = models.DateField(blank=True, null=True)
     image_url = CloudinaryField('image', null=True, blank=True)
 

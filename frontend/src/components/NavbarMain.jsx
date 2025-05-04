@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { assets } from "../assets/assets";
 import { useUser } from "../context/UserContext";
@@ -6,9 +6,25 @@ import { useUser } from "../context/UserContext";
 
 const NavbarMain = () => {
   const [showMenu, setShowMenu] = useState(false);
+  const menuRef = useRef(null);
   const navigate = useNavigate();
   const toggleMenu = () => setShowMenu(!showMenu);
   const [user] = useUser();
+  const avatar = user?.avatar || localStorage.getItem("avatar") || assets.user_icon;
+
+
+  useEffect(() => {
+    const handleClickOutSide = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)){
+        setShowMenu(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutSide);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutSide);
+    }
+  },[]);
 
   return (
     <div className="h-[8%] w-full bg-black text-white font-medium pt-2">
@@ -87,7 +103,7 @@ const NavbarMain = () => {
             </div>
           </div>
 
-          <div className="relative">
+          <div className="relative" ref={menuRef}>
             <div className="bg-[#2a2a2a] w-10 h-10 flex items-center justify-center rounded-full hover:bg-[#3a3a3a] transition">
               <div className="bg-black rounded-full p-[2px]">
                 <button
@@ -95,7 +111,7 @@ const NavbarMain = () => {
                   className="text-white w-10 h-10 rounded-full flex items-center justify-center text-sm cursor-pointer focus:outline-none"
                 >
                   <img
-                    src={user?.avatar || assets.user_icon}
+                    src={avatar || assets.user_icon}
                     alt="user icon"
                     className="w-full h-full object-cover rounded-full"
                   />
@@ -107,39 +123,25 @@ const NavbarMain = () => {
                 <Link
                   to="/profile"
                   className="block px-4 py-2 hover:bg-[#333] cursor-pointer"
+                  onClick={() => setShowMenu(false)}
                 >
                   Hồ Sơ
                 </Link>
-                <div className="px-4 py-2 hover:bg-[#333] cursor-pointer flex items-center">
-                  Nâng cấp Premium
-                  <img
-                    className="invert w-4 ml-auto"
-                    src={assets.external_icon}
-                    alt="external"
-                  />
-                </div>
-                <div className="px-4 py-2 hover:bg-[#333] cursor-pointer flex items-center">
-                  Hỗ Trợ
-                  <img
-                    className="invert w-4 ml-auto"
-                    src={assets.external_icon}
-                    alt="external"
-                  />
-                </div>
-                <div className="px-4 py-2 hover:bg-[#333] cursor-pointer flex items-center">
-                  Tải Xuống
-                  <img
-                    className="invert w-4 ml-auto"
-                    src={assets.external_icon}
-                    alt="external"
-                  />
-                </div>
-                <div className="px-4 py-2 hover:bg-[#333] cursor-pointer">
-                  Cài Đặt
-                </div>
+
+                {user?.role === "admin" && (
+                  <Link
+                    to="/useradmin"
+                    className="block px-4 py-2 hover:bg-[#333] cursor-pointer"
+                    onClick={() => setShowMenu(false)}
+                  >
+                    Admin
+                  </Link>
+                )}
+                
                 <Link
                   to="/logout"
                   className="block px-4 py-2 hover:bg-[#333] text-red-400 cursor-pointer"
+                  onClick={() => setShowMenu(false)}
                 >
                   Đăng xuất
                 </Link>

@@ -41,6 +41,7 @@ const Display = ({handleMusicClick, rightPanelVisible}) => {
         <Route path="/likedSong" element={<LikedSong/>}/>
         <Route path="/detailArtist/:artistId" element={<DetailArtist/>}/>
         <Route path="/playlist/:playlistId" element={<PlayList/>}/>
+
       </Routes>
     </div>
   );
