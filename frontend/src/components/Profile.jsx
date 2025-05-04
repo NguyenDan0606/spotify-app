@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import api from "../api";
 import { assets } from "../assets/assets";
@@ -13,7 +14,6 @@ function Profile() {
   const [isDirty, setIsDirty] = useState(false);
 
   const token = localStorage.getItem(ACCESS_TOKEN);
-
   useEffect(() => {
     const fetchProfile = async () => {
       try {

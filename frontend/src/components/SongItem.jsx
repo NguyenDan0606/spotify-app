@@ -9,12 +9,13 @@ const SongItem = (props) => {
     const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
     return `${hours}:${formattedMinutes}`;
   };
-
+  const {playWithId} = useContext(PlayerContext)
   const handleClick = () => {
     playWithId(props.id);
     props.handleMusicClick();
+    
   }
-  const {playWithId} = useContext(PlayerContext)
+  
   return (
     <div onClick={handleClick} className="min-w-[180px] p-2 px-3 rounded cursor-pointer hover:bg-[#ffffff26]">
         <img className="rounded" src={props.image} alt="" />
