@@ -33,12 +33,12 @@ function Home() {
       <ToastContainer position="bottom-center" autoClose={2000} />
         {/* {leftPanelVisible && <Sidebar setLeftPanelVisible={setLeftPanelVisible}/>} */}
         <Sidebar handlePlayListClick={handlePlayListClick}/>
-        <Display handleMusicClick={handleMusicClick} rightPanelVisible={rightPanelVisible}/>
+        <Display handleMusicClick={handleMusicClick} rightPanelVisible={rightPanelVisible} setRightPanelVisible={setRightPanelVisible}/>
         {rightPanelVisible && <Video key={track?.id}  isVideo={isVideo} track={track}/>}
       </div>
       { isOpenPlayList && <EditPlaylistModal setIsOpenPlayList={setIsOpenPlayList}/>} 
       <Player 
-        handleMusicClick={handleMusicClick} setRightPanelVisible={setRightPanelVisible} 
+        handleMusicClick={handleMusicClick} setRightPanelVisible={setRightPanelVisible}  setIsOpenPlayList={setIsOpenPlayList}
 
       />
       
