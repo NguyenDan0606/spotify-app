@@ -1,14 +1,18 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-key */
 import { FaPlay } from "react-icons/fa";
 import Footer from "./Footer";
-import { useState, useEffect } from "react";
+import { useState, useEffect,useContext } from "react";
 import { ACCESS_TOKEN } from "../constans";
-
-const LikedSong = () => {
-
-
+import { PlayerContext } from "../context/PlayerContext";
+const LikedSong = (props) => {
 
 
+  const handlePlaySongClick=(songID)=> {
+    props.setRightPanelVisible(true);
+    playWithId(songID);
+  }
+  const { playWithId } = useContext(PlayerContext);
   const [likedSongs, setLikedSongs] = useState([]);
 
   const fetchLikedSongs = async () => {
@@ -56,7 +60,7 @@ const LikedSong = () => {
     const loadLikedSongs = async () => {
       const likedList = await fetchLikedSongs();
 
-      if (!likedList) return; // Tránh lỗi nếu fetch fail
+      if (!likedList) return; 
 
       const fullSongs = await Promise.all(
         likedList.map(async (item) => {
@@ -103,9 +107,14 @@ const LikedSong = () => {
 
       {/* Play */}
       <div className="bg-gradient-to-b from-[#21183f] via-[#1d1635] to-[#1c1631] p-6 flex items-center gap-6">
-        <button className="bg-green-500 hover:bg-green-400 p-4 rounded-full">
-          <FaPlay size={24} className="text-black" />
-        </button>
+      {likedSongs.length > 0 && (
+          <button
+            className="bg-green-500 hover:bg-green-400 p-4 rounded-full"
+            onClick={() => handlePlaySongClick(likedSongs[0].id)}
+          >
+            <FaPlay size={24} className="text-black" />
+          </button>
+        )}
       </div>
 
       {/* List Songs */}
@@ -122,7 +131,7 @@ const LikedSong = () => {
           </thead>
           <tbody>
             {likedSongs.map((song, index) => (
-              <tr key={song.id} className="hover:bg-neutral-800 cursor-pointer">
+              <tr key={song.id} className="hover:bg-neutral-800 cursor-pointer" onClick={() => handlePlaySongClick(song.id)}>
                 <td className="py-3">{index + 1}</td>
                 <td>
                   <div className="flex items-center gap-3">
