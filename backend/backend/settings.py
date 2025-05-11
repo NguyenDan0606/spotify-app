@@ -58,6 +58,8 @@ SIMPLE_JWT = {
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -170,9 +172,9 @@ MEDIA_URL = '/songs/'
 MEDIA_ROOT = BASE_DIR / 'songs'
 
 
+
+
 #cloudinary - Django integration
-
-
 cloudinary.config(
     
     cloud_name = "dmxt3cezw",
@@ -181,6 +183,25 @@ cloudinary.config(
 )
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+# Channels settings
+ASGI_APPLICATION = "backend.asgi.application"
+# Channels Redis settings
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels_redis.core.RedisChannelLayer",
+#         "CONFIG": {
+#             "hosts": [("127.0.0.1", 6379)],
+#         },
+#     },
+# }
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    },
+}
+
 
 
 CACHES = {

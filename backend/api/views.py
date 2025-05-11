@@ -92,6 +92,18 @@ class UserViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         serializer = self.get_serializer(instance, context={"request": request})
         return Response(serializer.data)
+    
+    @action(detail=False, methods=['get'], url_path='me')
+    def get(self, request):
+        user = request.user
+        return Response({
+            'id': user.id,
+            'username': user.username,
+            'email': user.email,
+            'role': user.role,
+        })
+    
+    
 
 class UserListView(generics.ListAPIView):
     queryset = User.objects.all()
@@ -144,6 +156,7 @@ class SongViewSet(viewsets.ModelViewSet):
     queryset = Song.objects.all()
     serializer_class = SongSerializer
     permission_classes = [AllowAny]
+    
 
 class PlaylistViewSet(viewsets.ModelViewSet):
     queryset = Playlist.objects.all()
@@ -233,6 +246,14 @@ class ListeningHistoryViewSet(viewsets.ModelViewSet):
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+    
+    @action(detail=False, methods=['get'], url_path='by-song/(?P<song_id>[^/.]+)')
+    def by_song(self, request, song_id=None):
+        comments = Comment.objects.filter(song__id=song_id).order_by("created_at")
+        serializer = self.get_serializer(comments, many=True)
+        return Response(serializer.data)
+    
+
 
 class SendOTPView(APIView):
     permission_classes = [AllowAny]

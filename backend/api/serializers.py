@@ -139,6 +139,7 @@ class ListeningHistorySerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
     class Meta:
         model = Comment
-        fields = '__all__'
+        fields = ['id', 'user', 'song', 'content', 'created_at']

@@ -11,3 +11,7 @@ mysqlclient
 Pillow
 cloudinary
 django-cloudinary-storage
+channels
+channels_redis
+daphne
+
