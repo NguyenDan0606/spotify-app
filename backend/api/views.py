@@ -158,6 +158,14 @@ class PlaylistViewSet(viewsets.ModelViewSet):
     
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+        
+    def destroy(self, request, pk=None):
+        try:
+            playlist = Playlist.objects.get(pk=pk)
+            playlist.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Playlist.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
 class PlaylistSongViewSet(viewsets.ModelViewSet):
     queryset = PlaylistSong.objects.all()

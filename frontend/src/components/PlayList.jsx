@@ -1,16 +1,26 @@
+/* eslint-disable react/prop-types */
 import { FaPlay } from "react-icons/fa";
 import Footer from "./Footer";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { ACCESS_TOKEN } from "../constans";
 import axios from "axios";
+import { PlayerContext } from "../context/PlayerContext";
 
-const PlayList = () => {
+
+const PlayList = (props) => {
+  const { playWithId } = useContext(PlayerContext);
   const { playlistId } = useParams();
   const [Songs, setSongs] = useState([]);
   const [playlists, setPlaylists] = useState([]);
-  const selectedPlaylist = playlists.find((playlist) => playlist.id ===
-  Number(playlistId));
+  const selectedPlaylist = playlists.find(
+    (playlist) => playlist.id === Number(playlistId)
+  );
+
+  const handlePlaySongClick=(songID)=> {
+    props.setRightPanelVisible(true);
+    playWithId(songID);
+  }
 
   const token = localStorage.getItem(ACCESS_TOKEN);
   useEffect(() => {
@@ -63,7 +73,7 @@ const PlayList = () => {
   return (
     <div className="flex flex-col bg-neutral-900 text-white min-h-screen">
       {/* Header */}
-      
+
       {selectedPlaylist && (
         <div
           key={selectedPlaylist.id}
@@ -87,9 +97,14 @@ const PlayList = () => {
       )}
       {/* Play */}
       <div className="bg-gradient-to-b from-[#21183f] via-[#1d1635] to-[#1c1631] p-6 flex items-center gap-6">
-        <button className="bg-green-500 hover:bg-green-400 p-4 rounded-full">
-          <FaPlay size={24} className="text-black" />
-        </button>
+        {Songs.length > 0 && (
+          <button
+            className="bg-green-500 hover:bg-green-400 p-4 rounded-full"
+            onClick={() => handlePlaySongClick(Songs[0].id)}
+          >
+            <FaPlay size={24} className="text-black" />
+          </button>
+        )}
       </div>
       {/* List Songs */}
       <div className="bg-gradient-to-b from-[#1c1631] via-[#191527] to-[#121212] flex-1 px-8">
@@ -105,7 +120,11 @@ const PlayList = () => {
           </thead>
           <tbody>
             {Songs.map((song, index) => (
-              <tr key={song.id} className="hover:bg-neutral-800 cursor-pointer">
+              <tr
+                key={song.id}
+                className="hover:bg-neutral-800 cursor-pointer"
+                onClick={() => handlePlaySongClick(song.id)}
+              >
                 <td className="py-3">{index + 1}</td>
                 <td>
                   <div className="flex items-center gap-3">
@@ -136,5 +155,7 @@ const PlayList = () => {
     </div>
   );
 };
+
+
 
 export default PlayList;

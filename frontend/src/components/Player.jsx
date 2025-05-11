@@ -1,11 +1,12 @@
 /* eslint-disable no-undef */
 /* eslint-disable react/prop-types */
-import { useContext, useState,useEffect } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import { assets } from "../assets/assets";
 import { PlayerContext } from "../context/PlayerContext";
 import { ACCESS_TOKEN } from "../constans";
 import axios from "axios";
 import { toast } from "react-toastify";
+import AddToPlaylist from "./addToPlayList";
 
 
 const Player = (props) => {
@@ -23,16 +24,34 @@ const Player = (props) => {
     next,
     seekSong,
     audioRef,
-    
   } = useContext(PlayerContext);
-  
-  
-  
-
-
 
   const [liked, setLiked] = useState(false);
   const token = localStorage.getItem(ACCESS_TOKEN);
+  const [showAddPlaylist, setShowAddPlaylist] = useState(false);
+  const addPlaylistRef = useRef(null);
+
+   useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        addPlaylistRef.current &&
+        !addPlaylistRef.current.contains(event.target)
+      ) {
+        setShowAddPlaylist(false);
+      }
+    };
+
+    if (showAddPlaylist) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showAddPlaylist]);
+
 
   useEffect(() => {
     // Kiểm tra xem bài hát có trong danh sách yêu thích không
@@ -46,14 +65,14 @@ const Player = (props) => {
             },
           }
         );
-        
+
         // Cập nhật trạng thái dựa trên phản hồi từ server
         setLiked(response.data.is_liked);
       } catch (error) {
         console.error("Lỗi khi kiểm tra trạng thái yêu thích:", error);
       }
     };
-    
+
     checkLikedStatus();
   }, [track, token]);
 
@@ -64,34 +83,33 @@ const Player = (props) => {
         { song_id: track.id },
         {
           headers: {
-            Authorization: `Bearer ${token}`, 
+            Authorization: `Bearer ${token}`,
           },
         }
       );
 
-      
       // Update UI
       if (response.data.message === "Liked") {
         setLiked(true);
         toast.success(`Đã thêm ${track.title} vào yêu thích`);
-
       } else {
         setLiked(false);
         toast.error(`Đã xóa ${track.title} khỏi yêu thích`);
-
       }
     } catch (error) {
       console.error("Lỗi khi like bài hát:", error);
     }
   };
 
-
   return (
-    
     <div className="relative h-[10%] w-full bg-black flex justify-between items-center text-white px-4">
       {/* Left section: Track info + Like button */}
       <div className="hidden lg:flex items-center gap-4">
-        <img src={track?.image_url || "/default-image.png"} alt="cover" className="w-14 h-14 object-cover rounded"/>
+        <img
+          src={track?.image_url || "/default-image.png"}
+          alt="cover"
+          className="w-14 h-14 object-cover rounded"
+        />
         <div className="flex items-center gap-4">
           <div>
             <p>{track?.title || "Đang tải..."}</p>
@@ -115,8 +133,34 @@ const Player = (props) => {
               />
             </button>
             <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 bg-[#242424] text-white font-bold text-sm rounded shadow opacity-0 group-hover:opacity-100 transition duration-200 whitespace-nowrap pointer-events-none">
-              {liked ? 'Xóa khỏi bài hát yêu thích' : 'Thêm vào Bài hát yêu thích'}
+              {liked
+                ? "Xóa khỏi bài hát yêu thích"
+                : "Thêm vào Bài hát yêu thích"}
             </div>
+          </div>
+          <div className="relative group" ref={addPlaylistRef}>
+            {/* Nút + */}
+            <button
+              onClick={() => setShowAddPlaylist(!showAddPlaylist)}
+              className="bg-[#2a2a2a] w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#3a3a3a] transition duration-300"
+            >
+              <img src={assets.add_icon} alt="add" />
+            </button>
+            <div  className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 bg-[#242424] text-white font-bold text-sm rounded shadow opacity-0 group-hover:opacity-100 transition duration-200 whitespace-nowrap pointer-events-none">
+              Thêm vào Danh sách phát của bạn
+            </div>
+            
+
+            {/* Dropup menu */}
+            {showAddPlaylist && track?.id && (
+              <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 z-50">
+                <AddToPlaylist
+                 setIsOpenPlayList={props.setIsOpenPlayList}
+                  songId={track.id}
+                  onClose={() => setShowAddPlaylist(false)}
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -208,8 +252,8 @@ const Player = (props) => {
           <input
             type="range"
             min="0"
-            max={audioRef.current?.duration || 1 }
-            value={audioRef.current?.currentTime || 0 }
+            max={audioRef.current?.duration || 1}
+            value={audioRef.current?.currentTime || 0}
             onChange={seekSong}
             className="w-[60vw] max-w-[500px] h-1 accent-green-500 cursor-pointer"
           />
@@ -224,7 +268,10 @@ const Player = (props) => {
       <div className="hidden lg:flex items-center gap-2 opacity-75">
         {/* Button Plays */}
         <div className="relative group">
-          <button className="p-1" onClick={()=>(props.setRightPanelVisible(prev => !prev))} >
+          <button
+            className="p-1"
+            onClick={() => props.setRightPanelVisible((prev) => !prev)}
+          >
             <img className="w-4" src={assets.plays_icon} alt="Plays" />
           </button>
           <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 bg-[#242424] text-white font-bold text-sm rounded shadow opacity-0 group-hover:opacity-100 transition duration-200 whitespace-nowrap pointer-events-none">
@@ -293,7 +340,7 @@ const Player = (props) => {
           </button>
           <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 bg-[#242424] text-white font-bold text-sm rounded shadow opacity-0 group-hover:opacity-100 transition duration-200 whitespace-nowrap pointer-events-none">
             Mở chế độ Toàn màn hình
-          </div>  
+          </div>
         </div>
       </div>
     </div>
