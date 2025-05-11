@@ -33,6 +33,8 @@ const EditPlaylistModal = (props) => {
         }
       );
 
+      const newPlaylist = response.data;
+      props.setPlaylists([...props.playlists, newPlaylist]);
       console.log("Tạo thành công:", response.data);
       props.setIsOpenPlayList(false);
       toast.success(`Tạo playlist thành công`);
@@ -104,6 +106,7 @@ const EditPlaylistModal = (props) => {
               className="bg-neutral-700 text-white p-3 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
               value={playlistName}
               onChange={(e) => setPlaylistName(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleCreatePlaylist()}
             />
             <textarea
               placeholder="Thêm phần mô tả không bắt buộc"
@@ -119,6 +122,7 @@ const EditPlaylistModal = (props) => {
           <button
             className="bg-white text-black font-semibold px-6 py-2 rounded-full hover:bg-gray-200"
             onClick={handleCreatePlaylist}
+            
           >
             Lưu
           </button>

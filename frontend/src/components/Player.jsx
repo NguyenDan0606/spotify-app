@@ -24,6 +24,7 @@ const Player = (props) => {
     next,
     seekSong,
     audioRef,
+    isVideo,
   } = useContext(PlayerContext);
 
   const [liked, setLiked] = useState(false);
@@ -244,6 +245,7 @@ const Player = (props) => {
             </div>
           </div>
         </div>
+        {!isVideo && (
         <div className="flex items-center gap-5">
           <p>
             {time.currentTime.minute}:
@@ -262,6 +264,7 @@ const Player = (props) => {
             {String(time.remainingTime.second).padStart(2, "0")}
           </p>
         </div>
+        )}
       </div>
 
       {/* Right section: Options */}

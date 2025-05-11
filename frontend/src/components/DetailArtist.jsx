@@ -1,15 +1,23 @@
+/* eslint-disable react/prop-types */
 import Footer from "./Footer";
 import { FaPlay } from "react-icons/fa";
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import axios from "axios";
+import { PlayerContext } from "../context/PlayerContext";
 
 
-const DetailArtist = () => {
+const DetailArtist = ( {setRightPanelVisible} ) => {
   const { artistId } = useParams();
   const [songs, setSongs] = useState([]);
   const [artist, setArtist] = useState(null);
+  
 
+const handlePlaySongClick=(songID)=> {
+    setRightPanelVisible(true);
+    playWithId(songID);
+  }
+  const { playWithId } = useContext(PlayerContext);
 
   useEffect(() => {
     const fetchArtistSongs = async () => {
@@ -59,7 +67,8 @@ const DetailArtist = () => {
 
       {/* Play */}
       <div className="bg-gradient-to-b from-[#141313]  to-[#181717] p-6 flex items-center gap-6">
-        <button className="bg-green-500 hover:bg-green-400 p-4 rounded-full">
+        <button className="bg-green-500 hover:bg-green-400 p-4 rounded-full" onClick={() => handlePlaySongClick(songs[0].id)}>
+          
           <FaPlay size={24} className="text-black" />
         </button>
       </div>
@@ -78,7 +87,7 @@ const DetailArtist = () => {
           </thead>
           <tbody>
             {songs.map((item, index) => (
-              <tr key={item.id} className="hover:bg-neutral-800 cursor-pointer">
+              <tr key={item.id} className="hover:bg-neutral-800 cursor-pointer" onClick={() => handlePlaySongClick(item.id)}>
                 <td className="py-3">{index + 1}</td>
                 <td>
                   <div className="flex items-center gap-3">
