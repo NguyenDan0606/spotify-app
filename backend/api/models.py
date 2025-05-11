@@ -1,9 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from cloudinary.models import CloudinaryField
+from django.utils import timezone
 
 class User(AbstractUser):
-    
     ROLE_CHOICES = (
         ('user', 'User'),
         ('admin', 'Admin'),
@@ -21,7 +21,6 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
-
 class Artist(models.Model):
     name = models.CharField(max_length=255)
     bio = models.TextField(blank=True, null=True)
@@ -29,9 +28,6 @@ class Artist(models.Model):
 
     def __str__(self):
         return self.name
-    
-    
-
 
 class Album(models.Model):
     title = models.CharField(max_length=255)
@@ -41,9 +37,6 @@ class Album(models.Model):
 
     def __str__(self):
         return self.title
-    
-    
-
 
 class Song(models.Model):
     title = models.CharField(max_length=255)
@@ -56,11 +49,6 @@ class Song(models.Model):
 
     def __str__(self):
         return self.title
-    
-    
-    
-    
-
 
 class Playlist(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='playlists')
@@ -89,7 +77,6 @@ class LikedSong(models.Model):
     class Meta:
         unique_together = ('user', 'song')
 
-
 class ArtistFollow(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followed_artists')
     artist = models.ForeignKey(Artist, on_delete=models.CASCADE, related_name='followers')
@@ -98,12 +85,10 @@ class ArtistFollow(models.Model):
     class Meta:
         unique_together = ('user', 'artist')
 
-
 class ListeningHistory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='listening_history')
     song = models.ForeignKey(Song, on_delete=models.CASCADE)
     listened_at = models.DateTimeField(auto_now_add=True)
-
 
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -113,3 +98,15 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"Comment by {self.user.username} on {self.song.title}"
+
+class OTP(models.Model):
+    email = models.EmailField()
+    code = models.CharField(max_length=6)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+
+    def is_expired(self):
+        return timezone.now() > self.expires_at
+
+    def __str__(self):
+        return f"OTP for {self.email}"

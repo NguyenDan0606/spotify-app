@@ -8,7 +8,7 @@ from django.contrib.auth import get_user_model
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', "password", 'email', 'first_name', 'last_name', 'is_premium', 'avatar','role']
+        fields = ['id', 'username', "password", 'email', 'first_name', 'last_name', 'is_premium', 'avatar', 'role']
         extra_kwargs = {
             "password": {"write_only": True, "required": False},
             "avatar": {"required": False, "allow_null": True}
@@ -34,7 +34,12 @@ class UserSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
         if instance.avatar:
-            data['avatar'] = str(instance.avatar)  # Luôn là URL
+            try:
+                data['avatar'] = instance.avatar.url  # ✅ URL đầy đủ từ Cloudinary
+            except:
+                data['avatar'] = str(instance.avatar)  # fallback nếu có lỗi
+        else:
+            data['avatar'] = ""  # hoặc default URL
         return data
 
     
@@ -77,23 +82,21 @@ class AlbumSerializer(serializers.ModelSerializer):
 
 
 class SongSerializer(serializers.ModelSerializer):
-    image_url = serializers.SerializerMethodField()
-    audio_file = serializers.SerializerMethodField()
-    album = serializers.StringRelatedField()
-
     class Meta:
         model = Song
-        fields = '__all__'
-        
-    def get_image_url(self, obj):
-        if obj.image_url:
-            return obj.image_url.url
-        return None
-    
-    def get_audio_file(self, obj):
-        if obj.audio_file:
-            return obj.audio_file.url
-        return None 
+        fields = ['id', 'title', 'artists', 'album', 'audio_file', 'image_url', 'duration', 'created_at']
+        extra_kwargs = {
+            'audio_file': {'required': False},
+            'image_url': {'required': False},
+        }
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        if instance.audio_file:
+            rep['audio_file'] = instance.audio_file.url
+        if instance.image_url:
+            rep['image_url'] = instance.image_url.url
+        return rep
 
     
 

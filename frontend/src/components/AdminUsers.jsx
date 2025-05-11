@@ -13,7 +13,9 @@ const AdminUsers = () => {
   const fetchUsers = async () => {
     try {
       const res = await axios.get("http://127.0.0.1:8000/api/users/");
-      setUsers(res.data);
+      // Sắp xếp người dùng theo ID từ lớn đến nhỏ
+      const sortedUsers = res.data.sort((a, b) => b.id - a.id);
+      setUsers(sortedUsers);
     } catch (err) {
       console.error("Error fetching users:", err);
     }
@@ -46,11 +48,13 @@ const AdminUsers = () => {
         <table className="min-w-full table-auto text-sm border-collapse">
           <thead className="bg-[#2c2c2c] text-gray-300">
             <tr>
+              <th className="px-4 py-2 text-left">ID</th>
               <th className="px-4 py-2 text-left">Avatar</th>
               <th className="px-4 py-2 text-left">Username</th>
               <th className="px-4 py-2 text-left">Email</th>
               <th className="px-4 py-2 text-left">Fullname</th>
               <th className="px-4 py-2 text-left">Premium</th>
+              <th className="px-4 py-2 text-left">Role</th>
               <th className="px-4 py-2 text-left">Actions</th>
             </tr>
           </thead>
@@ -60,6 +64,7 @@ const AdminUsers = () => {
                 key={user.id}
                 className="border-t border-gray-600 hover:bg-[#2a2a2a]"
               >
+                <td className="px-4 py-2">{user.id}</td> {/* Hiển thị ID */}
                 <td className="px-4 py-2">
                   {user.avatar ? (
                     <img
@@ -77,6 +82,7 @@ const AdminUsers = () => {
                 <td className="px-4 py-2">
                   {user.is_premium ? "Yes" : "No"}
                 </td>
+                <td className="px-4 py-2">{user.role}</td>
                 <td className="px-4 py-2 space-x-2">
                   <button
                     onClick={() =>

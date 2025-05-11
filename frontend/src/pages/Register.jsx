@@ -9,7 +9,7 @@ function Register() {
   const [email, setEmail] = useState("");
   const [last_name, setLastName] = useState("");
   const [error, setError] = useState("");
-  const [successMessage, setSuccessMessage] = useState(""); // ✅ thêm
+  const [successMessage, setSuccessMessage] = useState("");
   const navigate = useNavigate();
 
   const isStrongPassword = (password) => {
@@ -24,7 +24,7 @@ function Register() {
     setError("");
     setSuccessMessage("");
 
-    // ✅ Kiểm tra các trường không được bỏ trống
+    // Kiểm tra các trường không được bỏ trống
     if (!username || !password || !confirmPassword || !email || !last_name) {
       setError("❌ Vui lòng điền đầy đủ thông tin.");
       return;
@@ -41,18 +41,20 @@ function Register() {
     }
 
     try {
-      const res = await api.post("/api/user/register/", {
-        username,
-        password,
-        email,
-        last_name,
-      });
+      const res = await api.post(
+        "/api/user/register/",
+        { username, password, email, last_name },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (res.status === 201 || res.status === 200) {
-        alert("✅ Đăng ký thành công!");
-        navigate("/login");
+        setSuccessMessage("✅ Đăng ký thành công!");
+        setTimeout(() => navigate("/login"), 1000); // Chuyển hướng sau 1 giây
       }
-      
     } catch (error) {
       if (error.response && error.response.data) {
         const data = error.response.data;
@@ -60,7 +62,13 @@ function Register() {
           setError(`❌ ${data.username.join(" ")}`);
         } else if (data.email) {
           setError(`❌ ${data.email.join(" ")}`);
+        } else if (data.detail) {
+          setError(`❌ ${data.detail}`);
+        } else {
+          setError("❌ Đăng ký thất bại. Vui lòng thử lại.");
         }
+      } else {
+        setError("❌ Đăng ký thất bại. Vui lòng kiểm tra kết nối.");
       }
       console.error("Đăng ký lỗi:", error);
     }
@@ -134,10 +142,10 @@ function Register() {
             />
           </div>
 
-          {/* ✅ Hiển thị thông báo lỗi */}
+          {/* Hiển thị thông báo lỗi */}
           {error && <p className="text-red-500 text-sm">{error}</p>}
 
-          {/* ✅ Hiển thị thông báo thành công */}
+          {/* Hiển thị thông báo thành công */}
           {successMessage && <p className="text-green-400 text-sm">{successMessage}</p>}
 
           <button

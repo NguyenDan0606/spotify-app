@@ -63,7 +63,7 @@ function Login() {
           />
 
           <p className="text-sm text-gray-400 mt-6">
-            <Link to="/register" className="text-white underline hover:text-green-400">
+            <Link to="/forgot-password" className="text-white underline hover:text-green-400">
               Quên mật khẩu
             </Link>
           </p>

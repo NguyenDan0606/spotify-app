@@ -11,8 +11,10 @@ function ProtectedRoute({ children, requiredRole = null }) { // <-- THÊM requir
     const [user] = useUser(); // <-- LẤY USER TỪ CONTEXT
 
     useEffect(() => {
-        auth().catch(() => setIsAuthorized(false));
-    }, []);
+        if(user != undefined) {
+            auth().catch(() => setIsAuthorized(false));
+        }
+    }, [user]);
 
     const refreshToken = async () => {
         const refreshToken = localStorage.getItem(REFRESH_TOKEN);
@@ -35,6 +37,10 @@ function ProtectedRoute({ children, requiredRole = null }) { // <-- THÊM requir
     const auth = async () => {
         const token = localStorage.getItem(ACCESS_TOKEN);
         if (!token) {
+            setIsAuthorized(false);
+            return;
+        }
+        if (requiredRole && (!user || user.role !== requiredRole)) {
             setIsAuthorized(false);
             return;
         }
