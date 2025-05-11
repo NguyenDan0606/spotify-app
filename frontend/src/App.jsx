@@ -9,7 +9,10 @@ import AdminSongs from "./components/AdminSongs";
 import AdminDisplay from "./components/AdminDisplay";
 import AdminUsers from "./components/AdminUsers";
 import AdminDetailUser from "./components/AdminDetailUser";
+import AdminDetailSongs from "./components/AdminDetailSongs";
 import Unauthorized from "./pages/Unauthorized";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import { useUser } from "./context/UserContext";
 import { useEffect } from "react";
 
@@ -44,6 +47,8 @@ const App = () => {
       <Route path="/logout" element={<Logout />} />
       <Route path="/register" element={<RegisterAndLogout />} />
       <Route path="/unauthorized" element={<Unauthorized />} />
+      <Route path="/forgot-password" element={<ForgotPassword />}/>
+      <Route path="/reset-password" element={<ResetPassword />}/>
 
       <Route
         path="/useradmin/*"
@@ -55,6 +60,8 @@ const App = () => {
       >
         <Route index element={<AdminDisplay selectedMenu="" />} />
         <Route path="api/songs" element={<AdminSongs />} />
+        <Route path="api/songs/new" element={<AdminDetailSongs mode="create" />} />
+        <Route path="api/songs/:id" element={<AdminDetailSongs mode="edit" />} />
         <Route path="api/users" element={<AdminUsers />} />
         <Route path="api/users/new" element={<AdminDetailUser mode="create" />} />
         <Route path="api/users/:id" element={<AdminDetailUser mode="edit" />} />

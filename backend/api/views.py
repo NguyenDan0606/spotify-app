@@ -7,8 +7,11 @@ from cloudinary.uploader import upload
 from .permissions import IsAdmin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
-
-
+from django.core.mail import send_mail
+from django.utils import timezone
+from datetime import timedelta
+import random
+import string
 
 from .models import *
 from .serializers import *
@@ -16,40 +19,51 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
+# class CreateUserView(generics.CreateAPIView):
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
+#     permission_classes = [AllowAny]
+#     parser_classes = [MultiPartParser, FormParser]
+
+#     def get_serializer_context(self):
+#         return {"request": self.request}
+
+#     def create(self, request, *args, **kwargs):
+#         data = request.data.copy()
+
+#         # Xử lý avatar nếu có
+#         avatar_file = request.FILES.get("avatar")
+#         if avatar_file:
+#             result = upload(avatar_file)
+#             print(result)  # In kết quả Cloudinary trả về
+#             data["avatar"] = result.get("secure_url")
+
+#         serializer = self.get_serializer(data=data)
+#         serializer.is_valid(raise_exception=True)
+#         user = serializer.save()
+
+#         # Hash mật khẩu nếu có
+#         password = data.get("password")
+#         if password:
+#             user.set_password(password)
+#             user.save()
+
+#         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
-    parser_classes = [MultiPartParser, FormParser]
-
+    # Xóa parser_classes vì không cần xử lý file ở đây, dùng JSONParser mặc định
 
     def get_serializer_context(self):
         return {"request": self.request}
 
     def create(self, request, *args, **kwargs):
-        data = request.data.copy()
-
-        # Xử lý avatar nếu có
-        avatar_file = request.FILES.get("avatar")
-        if avatar_file:
-            result = upload(avatar_file)
-            print(result)  # In kết quả Cloudinary trả về
-            data["avatar"] = result.get("secure_url")
-
-
-        serializer = self.get_serializer(data=data)
+        serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        user = serializer.save()
-
-        # Hash mật khẩu nếu có
-        password = data.get("password")
-        if password:
-            user.set_password(password)
-            user.save()
-
+        user = serializer.save()  # Serializer tự xử lý set_password và avatar
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -78,13 +92,11 @@ class UserViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         serializer = self.get_serializer(instance, context={"request": request})
         return Response(serializer.data)
-    
+
 class UserListView(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated, IsAdmin]
-
-
 
 class ProfileView(APIView):
     permission_classes = [IsAuthenticated]
@@ -111,7 +123,6 @@ class ProfileView(APIView):
         serializer = UserSerializer(user, context={"request": request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
 class ArtistViewSet(viewsets.ModelViewSet):
     queryset = Artist.objects.all()
     serializer_class = ArtistSerializer
@@ -124,18 +135,15 @@ class ArtistViewSet(viewsets.ModelViewSet):
         serializers = SongSerializer(songs,many=True)
         return Response(serializers.data)
 
-
 class AlbumViewSet(viewsets.ModelViewSet):
     queryset = Album.objects.all()
     serializer_class = AlbumSerializer
     permission_classes = [AllowAny]
 
-
 class SongViewSet(viewsets.ModelViewSet):
     queryset = Song.objects.all()
     serializer_class = SongSerializer
     permission_classes = [AllowAny]
-
 
 class PlaylistViewSet(viewsets.ModelViewSet):
     queryset = Playlist.objects.all()
@@ -168,8 +176,6 @@ class PlaylistSongViewSet(viewsets.ModelViewSet):
         } for ps in playlist_songs]
         return Response(data)
 
-
-
 class LikedSongViewSet(viewsets.ModelViewSet):
     queryset = LikedSong.objects.all()
     serializer_class = LikedSongSerializer
@@ -180,8 +186,6 @@ class LikedSongViewSet(viewsets.ModelViewSet):
         liked_songs = LikedSong.objects.filter(user=user)
         serializer = LikedSongSerializer(liked_songs, many=True)
         return Response(serializer.data)
-    
-
     
     @action(detail=False, methods=['post'], url_path='toggle-like')
     def toggle_like(self, request):
@@ -203,24 +207,92 @@ class LikedSongViewSet(viewsets.ModelViewSet):
     
     @action(detail=False, methods=['get'], url_path='check-liked/(?P<song_id>\d+)')
     def check_liked(self, request, song_id=None):
-            song = Song.objects.get(id=song_id)
-            is_liked = LikedSong.objects.filter(user=request.user, song_id=song_id).exists()
-            return Response({
-                'is_liked': is_liked,
-                'song_id': song_id
-            })
-
+        song = Song.objects.get(id=song_id)
+        is_liked = LikedSong.objects.filter(user=request.user, song_id=song_id).exists()
+        return Response({
+            'is_liked': is_liked,
+            'song_id': song_id
+        })
 
 class ArtistFollowViewSet(viewsets.ModelViewSet):
     queryset = ArtistFollow.objects.all()
     serializer_class = ArtistFollowSerializer
 
-
 class ListeningHistoryViewSet(viewsets.ModelViewSet):
     queryset = ListeningHistory.objects.all()
     serializer_class = ListeningHistorySerializer
 
-
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+
+class SendOTPView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        email = request.data.get("email")
+        if not email:
+            return Response({"error": "Email là bắt buộc."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response({"error": "Email không tồn tại."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Tạo OTP ngẫu nhiên (6 chữ số)
+        otp_code = ''.join(random.choices(string.digits, k=6))
+        expires_at = timezone.now() + timedelta(minutes=10)  # OTP hết hạn sau 10 phút
+
+        # Lưu OTP vào database
+        OTP.objects.create(
+            email=email,
+            code=otp_code,
+            expires_at=expires_at
+        )
+
+        # Gửi email chứa OTP
+        subject = 'Mã OTP đặt lại mật khẩu'
+        message = f'Mã OTP của bạn là: {otp_code}. Hiệu lực trong 10 phút.'
+        from_email = 'danquatao@gmail.com'
+        recipient_list = [email]
+
+        try:
+            send_mail(subject, message, from_email, recipient_list, fail_silently=False)
+        except Exception as e:
+            return Response({"error": "Lỗi gửi OTP, vui lòng thử lại."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        return Response({"message": "OTP đã được gửi về email."}, status=status.HTTP_200_OK)
+
+class ResetPasswordView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        email = request.data.get("email")
+        otp_code = request.data.get("otp")
+        new_password = request.data.get("new_password")
+
+        if not all([email, otp_code, new_password]):
+            return Response({"error": "Tất cả các trường đều bắt buộc."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Kiểm tra OTP
+        try:
+            otp = OTP.objects.get(email=email, code=otp_code)
+            if otp.is_expired():
+                return Response({"error": "OTP đã hết hạn."}, status=status.HTTP_400_BAD_REQUEST)
+        except OTP.DoesNotExist:
+            return Response({"error": "OTP không hợp lệ."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Kiểm tra user
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response({"error": "Người dùng không tồn tại."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Cập nhật mật khẩu mới
+        user.set_password(new_password)
+        user.save()
+
+        # Xóa OTP sau khi sử dụng
+        otp.delete()
+
+        return Response({"message": "Mật khẩu đã được đặt lại."}, status=status.HTTP_200_OK)

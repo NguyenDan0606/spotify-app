@@ -14,6 +14,7 @@ const AdminDetailUser = () => {
     password: "",
     last_name: "",
     is_premium: false,
+    role: "user",
   });
 
   const [avatarFile, setAvatarFile] = useState(null);
@@ -31,7 +32,6 @@ const AdminDetailUser = () => {
       const { avatar, ...rest } = res.data;
       setUserData({ ...rest, password: "" });
       setPreviewAvatar(avatar);
-      
     } catch (error) {
       console.error("Error fetching user:", error);
       alert("Không tìm thấy user.");
@@ -82,9 +82,9 @@ const AdminDetailUser = () => {
   };
 
   return (
-    <div className="h-full bg-gradient-to-t from-green-300 to-zinc-700 flex items-center justify-center px-4 rounded-lg">
+    <div className="p-2 h-full bg-gradient-to-t from-green-300 to-zinc-700 flex items-center justify-center rounded">
       <div className="bg-zinc-800 text-white p-8 rounded-2xl shadow-2xl w-full max-w-4xl relative">
-        <h2 className="text-3xl font-bold text-center mb-6">
+        <h2 className="text-3xl font-bold text-center mb-4">
           {isEdit ? "Chỉnh sửa người dùng" : "Thêm người dùng mới"}
         </h2>
 
@@ -222,10 +222,6 @@ const AdminDetailUser = () => {
             <span className="text-sm text-gray-400">Ảnh đại diện</span>
           </div>
         </div>
-
-        <p className="text-xs text-gray-500 mt-6 text-center">
-          Vui lòng đảm bảo bạn có quyền sử dụng hình ảnh đại diện đã tải lên.
-        </p>
       </div>
     </div>
   );
