@@ -1,12 +1,13 @@
 /* eslint-disable no-undef */
 /* eslint-disable react/prop-types */
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import { assets } from "../assets/assets";
 import { PlayerContext } from "../context/PlayerContext";
 import { ACCESS_TOKEN } from "../constans";
 import axios from "axios";
 import { toast } from "react-toastify";
 import AddToPlaylist from "./addToPlayList";
+
 
 const Player = (props) => {
   const {
@@ -28,6 +29,29 @@ const Player = (props) => {
   const [liked, setLiked] = useState(false);
   const token = localStorage.getItem(ACCESS_TOKEN);
   const [showAddPlaylist, setShowAddPlaylist] = useState(false);
+  const addPlaylistRef = useRef(null);
+
+   useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        addPlaylistRef.current &&
+        !addPlaylistRef.current.contains(event.target)
+      ) {
+        setShowAddPlaylist(false);
+      }
+    };
+
+    if (showAddPlaylist) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showAddPlaylist]);
+
 
   useEffect(() => {
     // Kiểm tra xem bài hát có trong danh sách yêu thích không
@@ -114,14 +138,18 @@ const Player = (props) => {
                 : "Thêm vào Bài hát yêu thích"}
             </div>
           </div>
-          <div className="relative inline-block">
+          <div className="relative group" ref={addPlaylistRef}>
             {/* Nút + */}
             <button
               onClick={() => setShowAddPlaylist(!showAddPlaylist)}
               className="bg-[#2a2a2a] w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#3a3a3a] transition duration-300"
             >
-              +
+              <img src={assets.add_icon} alt="add" />
             </button>
+            <div  className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 bg-[#242424] text-white font-bold text-sm rounded shadow opacity-0 group-hover:opacity-100 transition duration-200 whitespace-nowrap pointer-events-none">
+              Thêm vào Danh sách phát của bạn
+            </div>
+            
 
             {/* Dropup menu */}
             {showAddPlaylist && track?.id && (
