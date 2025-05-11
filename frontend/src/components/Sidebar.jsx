@@ -4,37 +4,15 @@ import { assets } from "../assets/assets";
 import { useContext, useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { ACCESS_TOKEN } from "../constans";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 
 
-const Sidebar = (props) => {
+const Sidebar = ({handlePlayListClick, playlists,token,setPlaylists }) => {
   const navigate = useNavigate();
-  const [playlists, setPlaylists] = useState([]);
-  const token = localStorage.getItem(ACCESS_TOKEN);
-
-  useEffect(() => {
-    const fetchPlaylists = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:8000/api/playlists/my-playlists/",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setPlaylists(response.data);
-      } catch (error) {
-        console.error("Lỗi khi lấy playlist:", error);
-      }
-    };
-
-    fetchPlaylists();
-  }, []);
 
   // const [message, setMessage] = useState("");
   // const [showThankYou, setShowThankYou] = useState(false);
@@ -102,7 +80,7 @@ const Sidebar = (props) => {
           <div className="flex items-center gap-2">
             <div className="relative group">
               <button
-                onClick={props.handlePlayListClick}
+                onClick={handlePlayListClick}
                 className="flex items-center justify-center gap-2 px-3 py-2 bg-[#242424] rounded-full cursor-pointer hover:brightness-125 transition duration-200"
               >
                 <img className="w-3" src={assets.plus_icon} alt="plus_icon" />

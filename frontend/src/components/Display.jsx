@@ -39,7 +39,7 @@ const Display = ({handleMusicClick, rightPanelVisible,setRightPanelVisible}) => 
         {/* <Route path="/album/:id" element={<DisplayAlbum />} /> */}
         <Route path="/profile" element={<Profile />} />
         <Route path="/likedSong" element={<LikedSong setRightPanelVisible={setRightPanelVisible}/>}/>
-        <Route path="/detailArtist/:artistId" element={<DetailArtist/>}/>
+        <Route path="/detailArtist/:artistId" element={<DetailArtist setRightPanelVisible={setRightPanelVisible}/>}/>
         <Route path="/playlist/:playlistId" element={<PlayList setRightPanelVisible={setRightPanelVisible}/>}/>
 
       </Routes>
