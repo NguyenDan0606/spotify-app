@@ -10,7 +10,7 @@ const AdminUsers = () => {
     fetchUsers();
   }, []);
 
-  const fetchUsers = async () => {
+  const fetchUsers = async () => {  
     try {
       const res = await axios.get("http://127.0.0.1:8000/api/users/");
       // Sắp xếp người dùng theo ID từ lớn đến nhỏ

@@ -2,15 +2,12 @@ import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 
 const menuItems = [
-  { label: "Albums", path: "/useradmin/albums" },
-  { label: "Artist Follows", path: "/useradmin/artist-follows" },
-  { label: "Artist", path: "/useradmin/artist" },
-  { label: "Comments", path: "/useradmin/comments" },
-  { label: "Liked Songs", path: "/useradmin/liked-songs" },
-  { label: "Listening Histories", path: "/useradmin/listening-histories" },
-  { label: "Playlist Songs", path: "/useradmin/playlist-songs" },
-  { label: "Songs", path: "/useradmin/api/songs" },
   { label: "Users", path: "/useradmin/api/users" },
+  { label: "Songs", path: "/useradmin/api/songs" },
+  { label: "Albums", path: "/useradmin/api/albums" },
+  { label: "Artist", path: "/useradmin/api/artist" },
+  { label: "Liked Songs", path: "/useradmin/api/liked-songs" },
+  { label: "Playlist Songs", path: "/useradmin/api/playlist-songs" },
 ];
 
 const AdminSidebar = ({ selectedPath }) => {

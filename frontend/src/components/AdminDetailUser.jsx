@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { assets } from "../assets/assets"; // dùng hình ảnh mặc định nếu cần
+import { assets } from "../assets/assets";
 
 const AdminDetailUser = () => {
   const { id } = useParams();

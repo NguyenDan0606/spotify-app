@@ -8,7 +8,7 @@ function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const [, setUser, fetchUser] = useUser(); // ✅ thêm fetchUser
+  const [ ,setUser, fetchUser] = useUser(); // ✅ thêm fetchUser
 
   const handleSubmit = async (e) => {
     e.preventDefault();

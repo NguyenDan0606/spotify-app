@@ -20,6 +20,7 @@ router.register(r'users', UserViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('register/', CreateUserView.as_view(), name='register'),
     path('profile/', ProfileView.as_view(), name='profile'),
     path("forgot-password/", SendOTPView.as_view()),
     path("reset-password/", ResetPasswordView.as_view()),

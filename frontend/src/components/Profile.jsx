@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import api from "../api";
 import { assets } from "../assets/assets";
@@ -72,10 +71,6 @@ function Profile() {
       setIsSaving(false);
     }
   };
-
-  if (!user) {
-    return <div className="text-white text-center py-10">Đang tải hồ sơ...</div>;
-  }
 
   return (
     <div className="h-full bg-gradient-to-t from-green-300 to-zinc-700 flex items-center justify-center px-4">

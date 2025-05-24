@@ -3,8 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { assets } from "../assets/assets";
 
-// ... giữ nguyên phần import như cũ
-
 const AdminDetailSongs = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -21,7 +19,6 @@ const AdminDetailSongs = () => {
   const [audioFile, setAudioFile] = useState(null);
   const [imageFile, setImageFile] = useState(null);
   const [previewImage, setPreviewImage] = useState("");
-
   const [artists, setArtists] = useState([]);
   const [albums, setAlbums] = useState([]);
 

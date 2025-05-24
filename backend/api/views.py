@@ -12,49 +12,16 @@ from django.utils import timezone
 from datetime import timedelta
 import random
 import string
-
 from .models import *
 from .serializers import *
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-# class CreateUserView(generics.CreateAPIView):
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializer
-#     permission_classes = [AllowAny]
-#     parser_classes = [MultiPartParser, FormParser]
-
-#     def get_serializer_context(self):
-#         return {"request": self.request}
-
-#     def create(self, request, *args, **kwargs):
-#         data = request.data.copy()
-
-#         # Xử lý avatar nếu có
-#         avatar_file = request.FILES.get("avatar")
-#         if avatar_file:
-#             result = upload(avatar_file)
-#             print(result)  # In kết quả Cloudinary trả về
-#             data["avatar"] = result.get("secure_url")
-
-#         serializer = self.get_serializer(data=data)
-#         serializer.is_valid(raise_exception=True)
-#         user = serializer.save()
-
-#         # Hash mật khẩu nếu có
-#         password = data.get("password")
-#         if password:
-#             user.set_password(password)
-#             user.save()
-
-#         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
 class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
-    # Xóa parser_classes vì không cần xử lý file ở đây, dùng JSONParser mặc định
 
     def get_serializer_context(self):
         return {"request": self.request}

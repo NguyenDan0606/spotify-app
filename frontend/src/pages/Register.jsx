@@ -41,9 +41,7 @@ function Register() {
     }
 
     try {
-      const res = await api.post(
-        "/api/user/register/",
-        { username, password, email, last_name },
+      const res = await api.post("/api/user/register/", { username, password, email, last_name },
         {
           headers: {
             "Content-Type": "application/json",

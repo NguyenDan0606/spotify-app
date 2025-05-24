@@ -39,7 +39,6 @@ function ResetPassword() {
     if (!validateForm()) {
       return;
     }
-
     setIsLoading(true);
     try {
       const email = localStorage.getItem("resetEmail");

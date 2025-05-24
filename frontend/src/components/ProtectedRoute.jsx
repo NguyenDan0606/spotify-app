@@ -3,10 +3,10 @@ import { jwtDecode } from "jwt-decode";
 import api from "../api";
 import { REFRESH_TOKEN, ACCESS_TOKEN } from "../constans";
 import { useState, useEffect } from "react";
-import { useUser } from "../context/UserContext"; // <-- THÊM DÒNG NÀY
+import { useUser } from "../context/UserContext"; 
 
 // eslint-disable-next-line react/prop-types
-function ProtectedRoute({ children, requiredRole = null }) { // <-- THÊM requiredRole
+function ProtectedRoute({ children, requiredRole = null }) { 
     const [isAuthorized, setIsAuthorized] = useState(null);
     const [user] = useUser(); // <-- LẤY USER TỪ CONTEXT
 
@@ -15,6 +15,7 @@ function ProtectedRoute({ children, requiredRole = null }) { // <-- THÊM requir
             auth().catch(() => setIsAuthorized(false));
         }
     }, [user]);
+
 
     const refreshToken = async () => {
         const refreshToken = localStorage.getItem(REFRESH_TOKEN);
@@ -51,7 +52,7 @@ function ProtectedRoute({ children, requiredRole = null }) { // <-- THÊM requir
         if (tokenExpiration < now) {
             await refreshToken();
         } else {
-            if (requiredRole && user?.role !== requiredRole) { // <-- KIỂM TRA ROLE
+            if (requiredRole && user?.role !== requiredRole) { 
                 setIsAuthorized(false);
             } else {
                 setIsAuthorized(true);

@@ -38,16 +38,16 @@ const AdminSongs = () => {
     }
   };
 
-  const handleDeleteSong = async (id) => {
-    if (!window.confirm("Bạn có chắc chắn muốn xoá bài hát này?")) return;
-    try {
-      await axios.delete(`http://127.0.0.1:8000/api/songs/${id}/`);
-      fetchSongs();
-    } catch (err) {
-      console.error("Error deleting song:", err);
-      alert("Error deleting song");
-    }
-  };
+    const handleDeleteSong = async (id) => {
+      if (!window.confirm("Bạn có chắc chắn muốn xoá bài hát này?")) return;
+      try {
+        await axios.delete(`http://127.0.0.1:8000/api/songs/${id}/`);
+        fetchSongs();
+      } catch (err) {
+        console.error("Error deleting song:", err);
+        alert("Error deleting song");
+      }
+    };
 
   return (
     <div className="p-4 h-[100%] text-white rounded-lg bg-[#121212]">
